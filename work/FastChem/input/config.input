@@ -1,0 +1,18 @@
+#FastChem parameter file
+input/parameters.dat
+
+#Atmospheric profile input file
+input/table.dat
+
+#Abundances output file
+output/chem_output_table.dat
+
+#Monitor output file
+output/monitor_output.dat
+
+#FastChem console verbose level (1 - 4); 1 = almost silent, 4 = detailed console output
+1
+
+#Output mixing ratios (MR) or particle number densities (ND, default)?
+ND
+
