@@ -12,8 +12,8 @@ Shigenobu Hirose (JAMSTEC, shirose@jamstec.go.jp)
 
 ## Reference
 Hirose, S., Hauschildt, P., Minoshima, T., Tomida, K., and Sano, T.
-- Astronomy and Astrophysics, in press, https://doi.org/10.1051/0004-6361/202141076 
-- arXiv https://arxiv.org/abs/2112.05689
+- Astronomy and Astrophysics, in press: https://doi.org/10.1051/0004-6361/202141076 
+- arXiv: https://arxiv.org/abs/2112.05689
 
 ---
 
@@ -34,6 +34,7 @@ Hirose, S., Hauschildt, P., Minoshima, T., Tomida, K., and Sano, T.
       ```makefile
       OPENMPI = /opt/local
       HDF5 = /opt/local
+      FFLAGS = -Wall #-fbounds-check
       ```
   2. Type `make` to build the executable(s):
       ```bash

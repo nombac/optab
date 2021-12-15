@@ -2,19 +2,18 @@
 OPENMPI = /opt/local
 HDF5 = /opt/local
 
+FFLAGS  = -Wall -O3 #-fbounds-check
+
 ### SYSTEM INDEPENDENT SECTION
 SHELL = /bin/sh
-
-FFLAGS  = -Wall -O3
-#FFLAGS  += -fbounds-check
 
 H5PFC = false
 ifeq ($(H5PFC),true)
 FC = $(HDF5)/bin/h5pfc
 else
 FC = $(OPENMPI)/bin/mpif90
-FFLAGS  += -I$(OPENMPI)/include -I$(HDF5)/include
-LDFLAGS  += -L$(HDF5)/lib -lhdf5 -lhdf5_hl -lhdf5_fortran -lhdf5_hl_fortran
+FFLAGS += -I$(OPENMPI)/include -I$(HDF5)/include
+LDFLAGS = -L$(HDF5)/lib -lhdf5 -lhdf5_hl -lhdf5_fortran -lhdf5_hl_fortran
 endif
 
 #LDFLAGS += -L/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib

@@ -3,9 +3,10 @@ SHELL = /bin/sh
 
 OPENMPI = /opt/local
 HDF5 = /opt/local
+FFLAGS  = -Wall #-fbounds-check
 
 FC = $(OPENMPI)/bin/mpif90
-FFLAGS  = -Wall -O3 -I$(HDF5)/include #-fbounds-check
+FFLAGS  += -O3 -I$(HDF5)/include
 LDFLAGS  = -L$(HDF5)/lib -lhdf5 -lhdf5_hl -lhdf5_fortran -lhdf5_hl_fortran
 
 #FFLAGS += -DDIRNIST=\'$(DIRNIST)\'
