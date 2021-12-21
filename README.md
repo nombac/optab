@@ -119,6 +119,7 @@ Here, we explain how to make opacity tables from a chemical abundance table gene
     > - `EOS` : path to the chemical abundance table in the HDF5 format created in the above step
     > - `OPTAB` : path to the top directory of `Optab`
     > - `DATABASE`: path to the top directory of `Optab` database
+    > - `MPIBIN`: path to the directory where `mpirun` is installed
     > - `jprc`: number of MPI processes
     
         
@@ -127,9 +128,10 @@ Here, we explain how to make opacity tables from a chemical abundance table gene
    ...
 
    #####
-   export EOS='/Users/shirose/opac2/eos/chem_output_table.h5'
-   export OPTAB='/Users/shirose/opac2/'
+   export EOS='/Users/shirose/optab/eos/FastChem/chem_output_table.h5'
+   export OPTAB='/Users/shirose/optab/'
    export DATABASE='/Users/shirose/database/'
+   export MPIBIN='/opt/local/bin'
    ...
 
    ##### SELECT A SINGLE LINE-SOURCE FOR EACH MOLECULAR ISOTOPOLOGUE

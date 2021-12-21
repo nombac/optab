@@ -2,9 +2,10 @@
 
 set -x -e
 
-export EOS='/Users/shirose/opac2/eos/chem_output_table.h5'
-export OPTAB='/Users/shirose/opac2/'
-export DATABASE='/Users/shirose/database/'
+export EOS='/Users/shirose/optab/eos/FastChem/chem_output_table.h5'
+export OPTAB='/Users/shirose/optab'
+export DATABASE='/Users/shirose/database'
+export MPIBIN='/opt/local/bin'
   
 
 ##### DIRECTORIES
@@ -345,6 +346,6 @@ cp $OPTAB/src/$EXEC .
 rsync -avu $OPTAB/src/*.F90 $OPTAB/src/Makefile src/
 
 ##### EXECUTION
-time mpirun -np $nprc $EXEC
-afplay /System/Library/Sounds/Blow.aiff
-say $WORKDIR ended
+time $MPIBIN/mpirun -np $nprc ./$EXEC
+#afplay /System/Library/Sounds/Blow.aiff
+#say $WORKDIR ended
