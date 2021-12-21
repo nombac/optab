@@ -2,7 +2,7 @@
 OPENMPI = /opt/local
 HDF5 = /opt/local
 
-FFLAGS  = -Wall -O3 #-fbounds-check
+FFLAGS  = -fallow-argument-mismatch -Wall -O3 #-fbounds-check
 
 ### SYSTEM INDEPENDENT SECTION
 SHELL = /bin/sh
