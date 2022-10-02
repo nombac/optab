@@ -1,0 +1,16 @@
+/CMakeFiles/*
+/.vscode/*
+/build
+/_deps/*
+/dist/*
+/pyfastchem.egg-info/
+python/pyfastchem.cpython*
+python/__pycache__/*
+manual/fastchem_manual.aux
+manual/fastchem_manual.bbl
+manual/fastchem_manual.blg
+manual/fastchem_manual.log
+manual/fastchem_manual.out
+manual/fastchem_manual.synctex.gz
+manual/fastchem_manual.toc
+fastchem
