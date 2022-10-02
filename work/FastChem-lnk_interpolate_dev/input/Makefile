@@ -35,4 +35,4 @@ prep_FastChem.o: const_module.o
 	$(FC) -c $(FFLAGS) -o $@ $<
 
 clean:
-	-\rm *.o *~ *.mod lnK_FastChem tp_grid
+	-\rm -rf *.o *~ *.mod prep_FastChem config.input* lnK_* tpgrid_*.dat
