@@ -24,18 +24,15 @@ endif
 
 ### SYSTEM INDEPENDENT SECTION ###
 
-logK_FastChem: const_module.o logK_FastChem.o
-	$(FC) -o $@ $^ $(LDFLAGS)
-
-table: table.o
+prep_FastChem: prep_FastChem.o const_module.o
 	$(FC) -o $@ $^ $(LDFLAGS)
 
 const_module.o:
 
-logK_FastChem.o: const_module.o
+prep_FastChem.o: const_module.o
 
 %.o: %.F90
 	$(FC) -c $(FFLAGS) -o $@ $<
 
 clean:
-	-\rm *.o *~ *.mod logK_FastChem table
+	-\rm *.o *~ *.mod lnK_FastChem tp_grid
