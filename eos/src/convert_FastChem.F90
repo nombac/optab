@@ -9,7 +9,7 @@ PROGRAM convert_FastChem
   IMPLICIT NONE
 
   CHARACTER*32768 :: linebuf, linebuf0
-  INTEGER, PARAMETER :: imax = 2048
+  INTEGER, PARAMETER :: imax = 4096
   CHARACTER*16 :: b(imax)
   CHARACTER*16, ALLOCATABLE :: species(:)
   INTEGER(INT32) :: i, i0, iostat, j, jmax, k, kmax, error
@@ -75,6 +75,7 @@ PROGRAM convert_FastChem
   ALLOCATE(species(kmax), id(kmax))
   DO k = 1, kmax
      READ(2,*) species(k), id(k)
+!     PRINT *, k, species(k), id(k)
   END DO
   CLOSE(2)
 
@@ -102,6 +103,7 @@ PROGRAM convert_FastChem
               n(id(k),j) = x(i) * x(4)
 #else              
               n(id(k),j) = x(i)
+              print *, k, i, b(i), species(k), n(id(k),j), temp(j), pres(j)
 #endif              
            END IF
         END DO
