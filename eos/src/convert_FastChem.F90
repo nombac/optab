@@ -103,7 +103,7 @@ PROGRAM convert_FastChem
               n(id(k),j) = x(i) * x(4)
 #else              
               n(id(k),j) = x(i)
-              print *, k, i, b(i), species(k), n(id(k),j), temp(j), pres(j)
+!              print *, k, i, b(i), species(k), n(id(k),j), temp(j), pres(j)
 #endif              
            END IF
         END DO
