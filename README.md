@@ -3,7 +3,7 @@
 
 To perform radiation hydrodynamics simulations, both the equation of state and opacity are necessary. In principle, these two should be derived from the same chemical equilibrium abundances, which often is not the case. `Optab` computes opacity based on user-provided chemical equilibrium abundances, and outputs mean opacities as well as monochromatic opacities. Consequently, one can have opacity tables consistent with one's equation of state.
 
-<img src="./eos/FastChem/chem_output_table.png" width="160"><img src="./sample/table/output/ross.png" width="160"><img src="./sample/table/output/pla.png" width="160"><img src="./sample/table/output/pla2.png" width="160"><img src="./sample/table/output/mono_00080.png" width="160">
+<img src="./eos/FastChem/table/eos.png" width="160"><img src="./sample/table/output/ross.png" width="160"><img src="./sample/table/output/pla.png" width="160"><img src="./sample/table/output/pla2.png" width="160"><img src="./sample/table/output/mono_00080.png" width="160">
 
 > In case you don't have your own chemical equilibrium solver, we recommend to use public solvers `FastChem` or `TEA` to compute chemical abundances, for which `Optab` provides interfaces; see an example below.
 
@@ -105,7 +105,7 @@ Here, we explain how to make opacity tables from a chemical abundance table gene
      $ export IDL_PATH=../idl:$PATH_TO_TEXTOIDL:$PATH_TO_COYOTE:"<IDL_DEFAULT>"
      $ idl -e 'eos, "chem_output_table.h5"'
      ```
-     <img src="./eos/FastChem/chem_output_table.png" width="400">
+     <img src="./eos/FastChem/table/eos.png" width="400">
 
 3. Now execute the sample script `table.sh` located in `$OPTAB/sample/` to run `Optab`:
    ```bash
