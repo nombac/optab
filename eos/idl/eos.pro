@@ -1,4 +1,4 @@
-PRO eos, fname
+PRO eos, fname, arg, syms
   
   COMPILE_OPT IDL2
   !EXCEPT=0
@@ -14,42 +14,43 @@ PRO eos, fname
   species = H5D_READ(h5D_OPEN(file, 'species'))
   H5F_CLOSE, file
   
-  layer = LINDGEN(n_layer)
-
-  ps_name =fname.Replace('.h5','')
+  fname0 =fname.Replace('.h5','')
+  SPAWN, 'mkdir '+fname0
 
   set_plot,'ps'
   !p.font=0
-  DEVICE, FILE=ps_name+'.eps', /color, /encapsulated, /SCHOOLBOOK
-  LOADCT, 10
+  DEVICE, FILE=fname0+'/eos.eps', /color, /encapsulated, /SCHOOLBOOK
+  LOADCT, 33
   !p.charsize=1.4
   
-  pres = pres / 1d6
-  xtitle = 'P [bar]'         & xrange = [1d-13,1d10] & xlog = 1
-  temp = 5040d0 / temp 
-  ytitle = '\theta [K^{-1}]' & yrange = [0d0  ,55d0] & ylog = 0
+  xtitle = 'T [K]'      & xrange = [1d2 ,1d8] & xlog = 1
+  ytitle = 'P [Ba]'     & yrange = [1d-5,1d10] & ylog = 1
 
-  title = 'Equation of state'
-  vrange = [-20,0]
-  v = ALOG10(rho)
-  
-  CGPLOT, [0], [0], /NODATA, XR=xrange, YR=yrange, XST=1, YST=1, XTIT=TEXTOIDL(xtitle), YTIT=TEXTOIDL(ytitle), YLOG=ylog, XLOG=xlog, TITLE=TEXTOIDL(title)
+  IF(arg EQ 'rho') THEN BEGIN
+     title = 'mass density'
+     cb_title = 'log \rho [g cm^{-3}]'
+     v = ALOG10(rho)
+     vrange = [-16,-2]
+  ENDIF ELSE IF(arg EQ 'mmw') THEN BEGIN
+     title = 'mean molecular weight'
+     cb_title = ''
+     v = rho[*] / ndens[0,*] / !amu
+     vrange = [0,3]
+  ENDIF
+
+  CGPLOT, [0], [0], /NODATA, XR=xrange, YR=yrange, XST=1, YST=1, XTIT=TEXTOIDL(xtitle), YTIT=TEXTOIDL(ytitle), YLOG=ylog, XLOG=xlog, TITLE=TEXTOIDL(title);, XTICKF='exponent', YTICKF='exponent'
   FOR j = 0, n_layer[0]-1 DO BEGIN
-     CGOPLOT, [pres[j]], [temp[j]], PSYM=15, SYMSIZE=3.5, COL=BYTSCL(FLOAT(v[j]), MIN=vrange[0], MAX=vrange[1])
+     IF(v[j]*0d0 NE 0d0) THEN BEGIN
+        color = 'black'
+     ENDIF ELSE BEGIN
+        color = BYTSCL(FLOAT(v[j]), MIN=vrange[0], MAX=vrange[1])
+     ENDELSE
+     CGOPLOT, [temp[j]], [pres[j]], PSYM=15, SYMSIZE=syms, COL=color
   ENDFOR
-  CGCOLORBAR, RANGE=vrange, TITLE=TEXTOIDL('log \rho [g cm^{-3}]'), POS=[0.77,0.20,0.80,0.80], CHARSIZE=1.5, /VERTICAL, /RIGHT
+  CGCOLORBAR, RANGE=vrange, TITLE=TEXTOIDL(cb_title), POS=[0.77,0.20,0.80,0.80], CHARSIZE=1.5, /VERTICAL, /RIGHT, COL='GRAY'
+
+  CGTEXT, 0.8, 0.95, fname0, /NORM, SIZE=0.75, COL='DARK GRAY', FONT=1, TT_FONT='COURIER'
 
   DEVICE,/CLOSE
-
-  epstopdf = 'n'
-  READ, PROMPT='Do you have "epstopdf" (y/N)? ', epstopdf
-  IF(epstopdf EQ 'y') THEN BEGIN
-     SPAWN, 'epstopdf '+ps_name+'.eps '+ps_name+'.pdf'
-  ENDIF
-  convert = 'n'
-  READ, PROMPT='Do you have "convert" (y/N)? ', convert
-  IF(convert EQ 'y') THEN BEGIN
-     SPAWN, 'convert '+ps_name+'.eps -background white -mosaic +matte '+ps_name+'.png'
-  ENDIF
 
 END
