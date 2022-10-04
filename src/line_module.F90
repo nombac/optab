@@ -65,6 +65,7 @@ CONTAINS
     ! parameters read from files
     INTEGER(INT32) :: icutoff
     CHARACTER(LEN=2) :: iprof = 'Vo'
+    CHARACTER :: fname*128
     REAL(REAL64) cutoff0_voigt, cutoff0_gauss, cutoff_p, cutoff_m, &
          strength_cutoff0, wnum_crit, delta, delta_crit, delta_voigt
     ! others
@@ -107,14 +108,19 @@ CONTAINS
     !-----------------------------------------------------------------------------
     ! start HDF5
     CALL h5open_f(error)
-    
+    CALL h5Eset_auto_f(0,error)
     ! open line list file
+    fname = 'input/h5/'//TRIM(source)//'.h5'
 #ifndef MPIO    
-    CALL h5Fopen_f('input/h5/'//TRIM(source)//'.h5', H5F_ACC_RDONLY_F, file_spec, error)
+    CALL h5Fopen_f(TRIM(fname), H5F_ACC_RDONLY_F, file_spec, error)
 #else
-    CALL h5LXopen_file('input/h5/'//TRIM(source)//'.h5', H5F_ACC_RDONLY_F, file_spec, error, &
+    CALL h5LXopen_file(TRIM(fname), H5F_ACC_RDONLY_F, file_spec, error, &
          MPI_COMM_WORLD, MPI_INFO_NULL)
-#endif    
+#endif
+    IF(error /= 0) THEN
+       PRINT *, '*** '//TRIM(fname)//' DOES NOT EXISTS ***'
+       CALL MPI_FINALIZE(ERROR); STOP
+    END IF
     !-----------------------------------------------------------------------------
     ! read id, frac, mass, and compute q
     CALL h5Gopen_f(file_spec, 'prop', grp_prop, error)
@@ -562,7 +568,7 @@ CONTAINS
     REAL(REAL64), ALLOCATABLE :: ene(:), q(:,:)
     INTEGER(INT32), PARAMETER :: na_uran = 92, mn_uran = 238
     REAL(REAL64), ALLOCATABLE :: mass(:), wn_ion(:)
-    CHARACTER :: natm*3, nion*2
+    CHARACTER :: natm*3, nion*2, fname*128
     ! Lorentz profile
     ! constants
     REAL(REAL64) g6, g4, gn, gamma
@@ -620,11 +626,17 @@ CONTAINS
 
     ! 読み込みファイルを開く
     CALL h5open_f(error)
+    CALL h5Eset_auto_f(0,error)
 
     !-----------------------------------------------------------------------------
     ! 同位体置換体の質量・存在比・分配関数
     ALLOCATE(q((na_uran+1)*100,UBOUND(temp0,1)))
-    CALL h5Fopen_f('input/h5/NIST.h5', H5F_ACC_RDONLY_F, file_spec, error)
+    fname = 'input/h5/NIST.h5'
+    CALL h5Fopen_f(TRIM(fname), H5F_ACC_RDONLY_F, file_spec, error)
+    IF(error /= 0) THEN
+       PRINT *, '*** '//TRIM(fname)//' DOES NOT EXISTS ***'
+       CALL MPI_FINALIZE(ERROR); STOP
+    END IF
     CALL h5Gopen_f(file_spec, 'prop', grp_prop, error) 
     DO na = 1, na_uran
        WRITE(natm,'(I3.3)') na
@@ -650,7 +662,12 @@ CONTAINS
     CALL h5Gclose_f(grp_prop, error)
     CALL h5Fclose_f(file_spec, error)
 #ifndef UNUSE_GFGAM
-    CALL h5Fopen_f('input/h5/gfgam.h5', H5F_ACC_RDONLY_F, file_spec, error)
+    fname = 'input/h5/gfgam.h5'
+    CALL h5Fopen_f(TRIM(fname), H5F_ACC_RDONLY_F, file_spec, error)
+    IF(error /= 0) THEN
+       PRINT *, '*** '//TRIM(fname)//' DOES NOT EXISTS ***'
+       CALL MPI_FINALIZE(ERROR); STOP
+    END IF
     DO na = 1, na_uran
        WRITE(natm,'(I3.3)') na
        DO ni = 0, na - 1 ! loop ion
@@ -679,12 +696,17 @@ CONTAINS
     !-----------------------------------------------------------------------------
 
     ! HDF5ファイルを開く
+    fname = 'input/h5/'//TRIM(source)//'.h5'
 #ifndef MPIO    
-    CALL h5Fopen_f('input/h5/'//TRIM(source)//'.h5', H5F_ACC_RDONLY_F, file_spec, error)
+    CALL h5Fopen_f(TRIM(fname), H5F_ACC_RDONLY_F, file_spec, error)
 #else    
-    CALL h5LXopen_file('input/h5/'//TRIM(source)//'.h5', H5F_ACC_RDONLY_F, file_spec, error, &
+    CALL h5LXopen_file(TRIM(fname), H5F_ACC_RDONLY_F, file_spec, error, &
          MPI_COMM_WORLD, MPI_INFO_NULL)
 #endif    
+    IF(error /= 0) THEN
+       PRINT *, '*** '//TRIM(fname)//' DOES NOT EXISTS ***'
+       CALL MPI_FINALIZE(ERROR); STOP
+    END IF
     !-----------------------------------------------------------------------------
     CALL h5Gopen_f(file_spec, 'trans', grp_trans, error)
     dims = [1]
@@ -1180,7 +1202,7 @@ CONTAINS
     REAL(REAL64), ALLOCATABLE :: ene(:), q(:,:)
     INTEGER(INT32), PARAMETER :: na_uran = 92, mn_uran = 238
     REAL(REAL64), ALLOCATABLE :: mass(:), wn_ion(:)
-    CHARACTER :: natm*3, nion*2
+    CHARACTER :: natm*3, nion*2, fname*128
     ! Lorentz profile
     ! constants
     REAL(REAL64), PARAMETER :: temp_ref = 1d4
@@ -1218,12 +1240,18 @@ CONTAINS
 
     ! 読み込みファイルを開く
     CALL h5open_f(error)
+    CALL h5Eset_auto_f(0,error)
 
     !-----------------------------------------------------------------------------
     ! 同位体置換体の質量・存在比・分配関数
     ALLOCATE(q((na_uran+1)*100,UBOUND(temp0,1)))
-    CALL h5Fopen_f('input/h5/NIST.h5', H5F_ACC_RDONLY_F, file_spec, error)
-    CALL h5Gopen_f(file_spec, 'prop', grp_prop, error) 
+    fname = 'input/h5/NIST.h5'
+    CALL h5Fopen_f(TRIM(fname), H5F_ACC_RDONLY_F, file_spec, error)
+    CALL h5Gopen_f(file_spec, 'prop', grp_prop, error)
+    IF(error /= 0) THEN
+       PRINT *, '*** '//TRIM(fname)//' DOES NOT EXISTS ***'
+       CALL MPI_FINALIZE(ERROR); STOP
+    END IF
     DO na = 1, na_uran
        WRITE(natm,'(I3.3)') na
        DO ni = 0, na - 1 ! loop ion
