@@ -19,7 +19,8 @@ PRO eos, fname=fname, arg=arg, syms=syms
 
   set_plot,'ps'
   !p.font=0
-  DEVICE, FILE=fname0+'/eos.eps', /color, /encapsulated, /SCHOOLBOOK
+  ps_name = fname0+'/eos.eps'
+  DEVICE, FILE=fname, /color, /encapsulated, /SCHOOLBOOK
   LOADCT, 33
   !p.charsize=1.4
   
@@ -52,5 +53,6 @@ PRO eos, fname=fname, arg=arg, syms=syms
   CGTEXT, 0.8, 0.95, fname0, /NORM, SIZE=0.75, COL='DARK GRAY', FONT=1, TT_FONT='COURIER'
 
   DEVICE,/CLOSE
+  SPAWN, 'convert "'+ps_name+'" -background white -mosaic +matte "'+ps_name+'.png"'
 
 END
