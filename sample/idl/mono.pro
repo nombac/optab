@@ -26,6 +26,10 @@ PRO mono, dir=dir, layer=layer
      ENDFOR
   ENDIF
   pre = np[0] * !k_bol * tmp
+
+  grd0 = DINDGEN(101, START=1d0, INCREMENT=0.1d0)
+  grd0 = 10d0^grd0
+  planck = grd0^3 / (EXP(!c2 * grd0 / tmp[0]) - 1d0)
   
   ps_name = dir+'/output/mono_'+STRTRIM(STRING(layer,FORMAT='(I05)'),2)
 
@@ -35,19 +39,24 @@ PRO mono, dir=dir, layer=layer
   LOADCT, 10
   !P.charsize = 1.4
   
-  xtitle = '\nu [cm^{-1}]' & xrange = [1d1,1d7] & xlog = 1
+  xtitle = '\nu [cm^{-1}]' & xrange = [1d1,1d9] & xlog = 1
   ytitle = '\alpha [cm^{-1}]'  & yrange = [1d-25,1d10] & ylog = 1
   title = 'monochromatic opacity'
 
+  planck /= MAX(planck)
+  
   CGPLOT, [0], [0], XR=xrange, YR=yrange, XS=1, YS=1, XLOG=xlog, YLOG=ylog, XTIT=TEXTOIDL(xtitle), YTIT=TEXTOIDL(ytitle), TIT=TEXTOIDL(title)
   CGOPLOT, grd, abs, COL='RED'
   CGOPLOT, grd, cnt-sca, COL='GRAY'
   CGOPLOT, grd, sca, COL='BLUE'
+  CGOPLOT, grd0, planck, LI=1
   CGTEXT, 0.25, 0.85, 'abs (cnt. + line)', COL='RED', /NORM, CHARSIZE=1
   CGTEXT, 0.25, 0.80, 'abs (cnt.)       ', COL='GRAY', /NORM, CHARSIZE=1
   CGTEXT, 0.25, 0.75, 'sca              ', COL='BLUE', /NORM, CHARSIZE=1
-  CGTEXT, 0.70, 0.80, TEXTOIDL('\theta = '+STRTRIM(STRING(5040d0/tmp,FORMAT='(F6.1)'),2)+' [K^{-1}]'), /NORM, CHARSIZE=1
-  CGTEXT, 0.70, 0.85, TEXTOIDL('P = 10^{'+STRTRIM(STRING(ALOG10(pre/1d6), FORMAT='(F6.1)'),2)+'} [bar]'), /NORM, CHARSIZE=1
+  ;; CGTEXT, 0.70, 0.80, TEXTOIDL('\theta = '+STRTRIM(STRING(5040d0/tmp,FORMAT='(F6.1)'),2)+' [K^{-1}]'), /NORM, CHARSIZE=1
+  CGTEXT, 0.70, 0.80, TEXTOIDL('logT = '+STRTRIM(STRING(ALOG10(tmp),FORMAT='(F6.1)'),2)+' [K]'), /NORM, CHARSIZE=1
+  ;; CGTEXT, 0.70, 0.85, TEXTOIDL('P = 10^{'+STRTRIM(STRING(ALOG10(pre/1d6), FORMAT='(F6.1)'),2)+'} [bar]'), /NORM, CHARSIZE=1
+  CGTEXT, 0.70, 0.85, TEXTOIDL('logP = '+STRTRIM(STRING(ALOG10(pre), FORMAT='(F6.1)'),2)+' [Ba]'), /NORM, CHARSIZE=1
 
   DEVICE,/CLOSE
   PRINT, ''

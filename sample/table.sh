@@ -2,8 +2,8 @@
 
 set -x -e
 
-export EOS='/Users/shirose/optab/eos/FastChem/chem_output_table.h5'
-export OPTAB='/Users/shirose/optab'
+export EOS='/Users/shirose/Downloads/optab/eos/FastChem/table.h5'
+export OPTAB='/Users/shirose/Downloads/optab'
 export DATABASE='/Users/shirose/database'
 export MPIBIN='/opt/local/bin'
   
@@ -312,13 +312,13 @@ temp2 = 6000d0
 &grid_log_const ! wavenumber grid
 k_total = 100000 ! total number of grid points
 grd_min = 1d0    ! min value of wavenumber grid
-grd_max = 7d0    ! max value of wavenumber grid
+grd_max = 9d0    ! max value of wavenumber grid
 /
 &mpi_decomp ! total number of MPI processes = kprc * jprc * mprc * jprc
 kprc = 1  ! number of processes in wavenumber grid (EXPERIMENTAL)
 lprc = 1  ! number of processes in line loop (EXPERIMENTAL)
 mprc = 1  ! number of processes in reading line-block loop (EXPERIMENTAL)
-jprc = 8  ! number of processes in layer loop
+jprc = 12  ! number of processes in layer loop
 /
 &block_cyclic
 iblock = 1
