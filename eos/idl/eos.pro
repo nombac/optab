@@ -1,4 +1,4 @@
-PRO eos, fname, arg, syms
+PRO eos, fname=fname, arg=arg, syms=syms
   
   COMPILE_OPT IDL2
   !EXCEPT=0

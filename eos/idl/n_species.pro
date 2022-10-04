@@ -1,4 +1,4 @@
-PRO n_species, fname
+PRO n_species, fname=fname, syms=syms
   
   COMPILE_OPT IDL2
   !EXCEPT=0
@@ -22,7 +22,7 @@ PRO n_species, fname
   ;; temp = 5040d0 / temp 
   ;; ytitle = '\theta [K^{-1}]' & yrange = [0d0  ,55d0] & ylog = 0
   xtitle = 'T [K]'      & xrange = [1d2 , 1d8] & xlog = 1
-  ytitle = 'P [Ba]'     & yrange = [1d-1,1d10] & ylog = 1
+  ytitle = 'P [Ba]'     & yrange = [1d-5,1d10] & ylog = 1
   
 
 ;  title = 'Equation of state'
@@ -54,9 +54,9 @@ PRO n_species, fname
   
      CGPLOT, [0], [0], /NODATA, XR=xrange, YR=yrange, XST=1, YST=1, XTIT=TEXTOIDL(xtitle), YTIT=TEXTOIDL(ytitle), YLOG=ylog, XLOG=xlog, TITLE=TEXTOIDL(title) ;, XTICKF='exponent', YTICKF='exponent'
      FOR j = 0, n_layer[0]-1 DO BEGIN
-        CGOPLOT, [temp[j]], [pres[j]], PSYM=15, SYMSIZE=3, COL=BYTSCL(FLOAT(v[j]), MIN=vrange[0], MAX=vrange[1])
+        CGOPLOT, [temp[j]], [pres[j]], PSYM=15, SYMSIZE=syms, COL=BYTSCL(FLOAT(v[j]), MIN=vrange[0], MAX=vrange[1])
      ENDFOR
-     CGCOLORBAR, RANGE=vrange, TITLE=TEXTOIDL('log \rho [g cm^{-3}]'), POS=[0.77,0.20,0.80,0.80], CHARSIZE=1.5, /VERTICAL, /RIGHT
+     CGCOLORBAR, RANGE=vrange, TITLE=TEXTOIDL('log \rho [g cm^{-3}]'), POS=[0.77,0.20,0.80,0.80], CHARSIZE=1.5, /VERTICAL, /RIGHT, COL='GRAY'
 
      CGTEXT, 0.8, 0.95, fname0, /NORM, SIZE=0.75, COL='DARK GRAY', FONT=1, TT_FONT='COURIER'
 
