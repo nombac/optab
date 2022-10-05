@@ -3,7 +3,7 @@
 
 To perform radiation hydrodynamics simulations, both the equation of state and opacity are necessary. In principle, these two should be derived from the same chemical equilibrium abundances, which often is not the case. `Optab` computes opacity based on user-provided chemical equilibrium abundances, and outputs mean opacities as well as monochromatic opacities. Consequently, one can have opacity tables consistent with one's equation of state.
 
-<img src="./eos/FastChem/table/eos.eps.png" width="160"><img src="./sample/table/output/ross.png" width="160"><img src="./sample/table/output/pla.png" width="160"><img src="./sample/table/output/pla2.png" width="160"><img src="./sample/table/output/mono_00030.png" width="160"><img src="./sample/table/output/mono_00080.png" width="160">
+<img src="./sample/tab100/input/eos/eos.eps.png" width="160"><img src="./sample/tab100/output/ross.png" width="160"><img src="./sample/tab100/output/pla.png" width="160"><img src="./sample/tab100/output/pla2.png" width="160"><img src="./sample/tab100/output/mono_03000.png" width="160">
 
 > In case you don't have your own chemical equilibrium solver, we recommend to use public solvers `FastChem` or `TEA` to compute chemical abundances, for which `Optab` provides interfaces; see an example below.
 
