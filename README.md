@@ -12,7 +12,7 @@ Shigenobu Hirose (JAMSTEC, shirose@jamstec.go.jp)
 
 ## Reference
 Hirose, S., Hauschildt, P., Minoshima, T., Tomida, K., and Sano, T.
-- Astronomy and Astrophysics, in press: https://doi.org/10.1051/0004-6361/202141076 
+- Astronomy and Astrophysics 659, A87 (2022): https://doi.org/10.1051/0004-6361/202141076 
 - arXiv: https://arxiv.org/abs/2112.05689
 
 ---
