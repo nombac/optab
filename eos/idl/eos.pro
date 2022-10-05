@@ -20,7 +20,7 @@ PRO eos, fname=fname, arg=arg, syms=syms
   set_plot,'ps'
   !p.font=0
   ps_name = fname0+'/eos.eps'
-  DEVICE, FILE=fname, /color, /encapsulated, /SCHOOLBOOK
+  DEVICE, FILE=ps_name, /color, /encapsulated, /SCHOOLBOOK
   LOADCT, 33
   !p.charsize=1.4
   
