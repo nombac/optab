@@ -68,7 +68,7 @@ Hirose, S., Hauschildt, P., Minoshima, T., Tomida, K., and Sano, T.
     - Scattering
       - Thomson scattering
       - Rayleigh scattering
-        - [Lee (2005)](https://doi.org/10.1111/j.1365-2966.2005.08859.x): H
+        - [Rohrmann & Rueda (2022)](https://doi.org/10.1051/0004-6361/202243883): H
         - [Rohrmann (2017)](https://doi.org/10.1093/mnras/stx2440): He
         - [Tarafdar & Vardya (1973)](https://doi.org/10.1093/mnras/163.3.261): H<sub>2</sub>
 
