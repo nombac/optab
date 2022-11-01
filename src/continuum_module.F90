@@ -2157,6 +2157,142 @@ CONTAINS
   END SUBROUTINE cross_rayleigh_h2_tarafdar_1973
     
 
+  SUBROUTINE cross_rayleigh_h_rohrmann_2022(grd, crs)
+    ! Rayleigh scattering cross sections for H
+    ! Rohrmann & Vera Rueda (2022), A&A, 667, A3
+    USE const_module, ONLY : alpha, m_ele, hbar, clight, erg_to_ev, megabarn_to_cm2, pi
+    USE const_module, ONLY : h, rydberg, alpha
+    IMPLICIT NONE
+    REAL(REAL64), INTENT(IN) :: grd(:)    ! wavenumber grid [cm^-1]
+    REAL(REAL64), INTENT(OUT) :: crs(:) ! cross section [cm^-2]
+
+    REAL(REAL64), PARAMETER :: crs_thomson = 8d0 * pi / 3d0 * (alpha * hbar / (m_ele * clight))**2
+    INTEGER(INT32) :: k, ks, ke, n
+    REAL(REAL64), ALLOCATABLE :: eps(:), alpr(:), alpi(:)
+    REAL(REAL64), PARAMETER :: e1s12 = -1.0000133128d0, epsa = 0.48083d0
+    INTEGER(INT32), PARAMETER :: n_max = 100
+    REAL(REAL64) :: e12, e32, e1n12(n_max), e1n32(n_max), eave(n_max), f, f12, f32, del, s, &
+         a_n, b_n, de, phi, c_n, d_n, xi, be, feps, nr
+    
+    ks = 1
+    ke = UBOUND(grd,1)
+
+    ALLOCATE(eps(UBOUND(grd,1)), alpr(UBOUND(grd,1)), alpi(UBOUND(grd,1)))
+    eps = (h * clight * grd) / rydberg
+
+    DO n = 2, n_max
+       e12 = -1d0/n**2 + alpha**2/n**3*(3d0/(4d0*n) - 1d0) ! eq(26)
+       e32 = -1d0/n**2 + alpha**2/n**3*(3d0/(4d0*n) - 1d0/2d0) ! eq(26)
+          
+       e1n12(n) = e12 - e1s12 ! eq(28)
+       e1n32(n) = e32 - e1s12 ! eq(28)
+       eave(n) = 0.5d0 * (e1n12(n) + e1n32(n)) !eq(31)
+    END DO
+
+    alpr = 0d0
+    alpi = 0d0
+    DO k = ks, ke
+       IF(eps(k) .LE. e1n12(2)) THEN
+          !(31)
+          IF(eps(k) .LE. epsa) THEN
+             s = 0.0017d0 * SIN(8.2d0 * eps(k)**1.33d0) - 0.000093d0
+          ELSE IF(eps(k) .LE. 0.73d0) THEN
+             s = -0.00163d0 * SIN(16.86d0 * (ABS(eps(k) - epsa))**1.2d0)
+          ELSE IF(eps(k) .LE. 0.745d0) THEN
+             s = 0d0
+          ELSE
+             s = -10d0**(-4.9d0 + 0.205d0 * (0.7501d0 - eps(k))**(-0.3d0))
+          END IF
+          !(30)
+          alpr(k) = (1.46486d0 / (0.950713d0 - eps(k)**2.172d0) + &
+               1.66478d0 / (eave(2)**2 - eps(k)**2)) / (1d0 - s)
+       ELSE IF(eps(k) .LE. e1n12(n_max)) THEN
+          DO n = 2, n_max-1
+             nr = DBLE(n)
+             !(11)
+             f = 128d0 / (3d0 * EXP(4d0)) * 2d0 / n**3 * &
+                  (1d0 + 8d0/(3d0*n**2) + 214d0/(45d0*n**4) + &
+                  20192d0/(2835d0*n**6) + 411683d0/(42525*n**8) + &
+                  17369584d0/(1403325d0*n**10))
+             !(21)
+             f12 = f * (1d0/3d0)
+             f32 = f * (2d0/3d0)
+             !(24)
+             del = alpha**3 / n**5 * (-0.187d0 + 2.915d0 * LOG(nr))
+             IF(e1n12(n) .LE. eps(k) .AND. eps(k) .LE. e1n32(n)) THEN
+#undef FINE_STRUCTURE_NEGLECTED
+#ifdef FINE_STRUCTURE_NEGLECTED
+                !(48)
+                alpr(k) = 4d0 * f / SQRT((eave(n)**2 - eps(k)**2)**2 + (eps(k)*del)**2)
+#else                
+                !(32)
+                alpr(k) = 4d0*f12*(e1n12(n)**2 - eps(k)**2) / ((e1n12(n)**2 - eps(k)**2)**2 &
+                     + eps(k)**2*del**2) &
+                     + 4d0*f32*(e1n32(n)**2 - eps(k)**2) / ((e1n32(n)**2 - eps(k)**2)**2 &
+                     + eps(k)**2*del**2)
+                !(33)
+                alpi(k) = 4d0*f12*eps(k)*del / ((e1n12(n)**2 - eps(k)**2)**2 &
+                     + eps(k)**2*del**2) &
+                     + 4d0*f32*eps(k)*del / ((e1n32(n)**2 - eps(k)**2)**2 &
+                     + eps(k)**2*del**2)
+#endif                
+             ELSE IF(e1n32(n) .LE. eps(k) .AND. eps(k) .LE. e1n12(n+1)) THEN
+                !(40)
+                IF(n .LE. 100) THEN
+                   a_n = 0.1412d0*(2d0 - LOG10(nr))**2.83d0
+                ELSE
+                   a_n = 0d0
+                END IF
+                !(41)(36)
+                IF(n .EQ. 2) THEN
+                   b_n = 0.214657809d0
+                   de = 315.49655d0
+                ELSE
+                   b_n = 0.268d0 - 10d0**(-1.2d0-0.45d0*(LOG10(nr))**2-1.61d-7*(LOG10(nr))**22)
+                   de = 15.5183449d0 * n**2.9769922d0 / (1d0 - a_n)
+                END IF
+                !(37)
+                phi = e1n12(n+1) - (e1n12(n+1) - e1n32(n)) * b_n
+                !(42)(43)(44)(39)(35)
+                IF(eps(k) .LE. phi) THEN
+                   c_n = .7346d0 - 10d0**(-0.12d0-1.95d0*LOG10(nr)+0.035d0*(LOG10(nr))**(-2))
+                   IF(n .EQ. 2) THEN
+                      d_n = 0.245d0
+                   ELSE IF(n .LE. 6) THEN
+                      d_n = 0.255d0
+                   ELSE
+                      d_n = 0.256d0 - 10d0**(-1.15d0-0.22d0*(LOG10(nr)-0.6d0)**(-1.12d0))
+                   END IF
+                   xi = (phi - eps(k)) / (phi - e1n32(n))
+                   be = pi / (2d0 * (phi - e1n32(n)))
+                ELSE
+                   c_n = 0.928d0 - 10d0**(-0.35d0-1.65d0*LOG10(nr)+0.243d0*(LOG10(nr))**(-0.43d0))
+                   d_n = 0.053d0 - 10d0**(-0.44d0-1.965d0*(LOG10(nr))**0.6d0)
+                   xi = (eps(k) - phi) / (e1n12(n+1) - phi)
+                   be = pi / (2d0 * (e1n12(n+1) - phi))
+                END IF
+                !(38)
+                feps = (1d0 + c_n*xi) * (1d0 - d_n*(1d0 - (2d0*xi - 1d0)**2))
+                !(34)
+                alpr(k) = de/be * TAN(be * (eps(k)-phi)) * feps ! eq(34)
+             END IF
+          END DO
+       ELSE IF(eps(k) .LE. 2d0/alpha) THEN
+          !(46)
+          alpr(k) = 4d0 / eps(k)**2 * (1d0 + 0.6262d0 / &
+               (1d0 + 2.8179d0 * eps(k)**0.6776d0 * (1d0 + &
+               0.0216672d0 * eps(k)**1.4745d0) * LOG(eps(k))))
+       END IF
+    END DO
+    !(1)(7)
+    crs = (alpr**2 + alpi**2) * eps**4 * (crs_thomson / 16d0)
+
+    DEALLOCATE(eps, alpr, alpi)
+
+    RETURN    
+  END SUBROUTINE cross_rayleigh_h_rohrmann_2022
+  
+    
   SUBROUTINE cross_rayleigh_h_lee_2005(grd, crs)
     ! Rayleigh scattering cross sections for H
     ! Lee (2005), MNRAS, 358, 1472

@@ -17,6 +17,7 @@ PROGRAM main
        cross_photo_verner, &
        cross_photo_h2_yan_2001, &
        cross_rayleigh_h_lee_2005, &
+       cross_rayleigh_h_rohrmann_2022, &
        cross_rayleigh_he_tarafdar_1969, &
        cross_rayleigh_he_rohrmann_2018, &
        cross_rayleigh_h2_tarafdar_1973, &
@@ -329,7 +330,8 @@ PROGRAM main
      IF(rayleigh_scattering_h == 1) THEN
         call wtime(name='Rayleigh sca(H):')
         ALLOCATE(out(ks:ke,NA:NA,NA:NA))
-        CALL cross_rayleigh_h_lee_2005(grd(:), out(:,NA,NA))
+!!$        CALL cross_rayleigh_h_lee_2005(grd(:), out(:,NA,NA))
+        CALL cross_rayleigh_h_rohrmann_2022(grd(:), out(:,NA,NA))
         DO j = js, je
            sca(:,j) = sca(:,j) + (np1(HI,j) * frac_g(j, HI)) * out(:,NA,NA)
         END DO
