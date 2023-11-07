@@ -11,6 +11,9 @@ This directory stores opacity databases used in Optab.
 ### `1016620_Supplementary_Data/`
 - This directory stores free-free Gaunt factor data by [van Hoof et al. (2014)](https://academic.oup.com/mnras/article/444/1/420/1016620).
 - Extract their [supplementary data](https://academic.oup.com/mnras/article/444/1/420/1016620#supplementary-data) in this directory.
+```
+unzip ~/Downloads/1016620_Supplementary_Data.zip -d 1016620_Supplementary_Data
+```
 
 ### `Karzas_Latter_1961.tsv`
 - This file is "Table I" (bound-free Gaunt factors) in [Karzas and Latter (1961)](http://articles.adsabs.harvard.edu/pdf/1961ApJS....6..167K) (&copy; AAS. Reproduced with permission).
@@ -18,6 +21,9 @@ This directory stores opacity databases used in Optab.
 ### `photo/`
 - This directory contains [Verner's photoionization cross sections data](https://www.pa.uky.edu/~verner/photo.html).
 - Copy all files in https://www.pa.uky.edu/~verner/dima/photo/ into this directory.
+```
+wget -r -np -nH --cut-dirs=3 -P photo -R "index.html*" https://www.pa.uky.edu/~verner/dima/photo/
+```
 
 ### `TOPbase/`
 - This directory is a workspace for [TOPbase: photoionization cross sections](http://cdsweb.u-strasbg.fr/topbase/xsections.html).
