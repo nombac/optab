@@ -32,10 +32,9 @@ This directory stores opacity databases used in Optab.
 
 ### `NIST/`
 - This directory is a workspace for NIST [Atomic Weights and Isotopic Compositions with Relative Atomic Masses](https://www.nist.gov/pml/atomic-weights-and-isotopic-compositions-relative-atomic-masses) and [Atomic Spectra Database Levels](https://physics.nist.gov/PhysRefData/ASD/levels_form.html).
-1. Execte `get_nist_atomic.sh` and `get_nist_levels.sh` to retrieve the data, respectively:
+1. Execte `get_nist_parallel.py` to retrieve the data:
    ```
-   % bash ../fetch/get_nist_atomic.sh
-   % bash ../fetch/get_nist_levels.sh
+   % python3 ../fetch/get_nist_parallel.sh
    ```
 2. Execute `convert_nist_h5` to store the data in the specifice HDF5 format for `Optab`:
    ```
