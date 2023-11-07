@@ -21,9 +21,9 @@ This directory stores opacity databases used in Optab.
 
 ### `TOPbase/`
 - This directory is a workspace for [TOPbase: photoionization cross sections](http://cdsweb.u-strasbg.fr/topbase/xsections.html).
-1. Execute `get_topbase.sh` to retrieve the cross section data:
+1. Execute `get_topbase.py` to retrieve the cross section data:
    ```
-   % bash ../fetch/get_topbase.sh
+   % python3 ../fetch/get_topbase.py
    ```
 2. Execute `convert_topbase_h5` to store the data in the specific HDF5 format for `Optab`:
    ```
