@@ -44,7 +44,7 @@ def process_aaa(aaa, output_directory, pbar):
 
 def main():
     # Set the minimum and maximum values for 'aaa'
-    amin = 92
+    amin = 1
     amax = 92
 
     # Calculate the total iterations for the progress bar
