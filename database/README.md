@@ -151,9 +151,11 @@ wget -r -np -nH --cut-dirs=3 -P photo -R "index.html*" https://www.pa.uky.edu/~v
 - This directory is a workspace for [Kurucz atomic linelinsts](http://kurucz.harvard.edu/linelists.html)
 1. Execute `get_kurucz_linelists.sh`, which retrieves two linelists, `gfall08oct17.dat` and `gfpred26apr18.dat`, from Kurucz database and puts them in the subdirectory `linelists/`. Edit `list_convert.txt` to list the relative paths of the linelists, and execute `convert_lines_h5` to generate HDF5 files for `Optab`:
    ```bash
-   $ bash ../fetch/get_kurucz_linelists.sh
-   $ ls linelists/*.dat > list_convert.txt
-   $ ../src/convert_lines_h5
+   bash ../fetch/get_kurucz_linelists.sh
+   ls linelists/gfall08oct17.dat > list_convert.txt
+   ../src/convert_lines_h5
+   ls linelists/gfpred26apr18.dat > list_convert.txt
+   ../src/convert_lines_h5
    ```
 2. Execute `get_kurucz_gfgam.sh` to get the level data file `gf????.gam` for all species available (ignore `Not Found` errors), and execute `convert_gfgam_h5` to generate an HDF5 file for `Optab`:
    ```bash
