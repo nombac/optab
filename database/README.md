@@ -157,7 +157,6 @@ wget -r -np -nH --cut-dirs=3 -P photo -R "index.html*" https://www.pa.uky.edu/~v
    ```
 2. Execute `get_kurucz_gfgam.sh` to get the level data file `gf????.gam` for all species available (ignore `Not Found` errors), and execute `convert_gfgam_h5` to generate an HDF5 file for `Optab`:
    ```bash
-   mkdir atoms
-   bash ../fetch/get_kurucz_gfgam.sh
+   python3 ../fetch/get_kurucz_gfgam.py
    ../src/convert_gfgam_h5
    ```
