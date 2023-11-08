@@ -5,6 +5,7 @@
 
 dir=./atoms/
 #echo ${dir}
+mkdir -p ${dir}
 
 nz_min=1
 nz_max=92
