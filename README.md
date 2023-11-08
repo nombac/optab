@@ -92,16 +92,15 @@ Here, we explain how to make opacity tables from a chemical abundance table gene
 
 2. Convert the `FastChem`'s output file to a specific HDF5 file for `Optab`:
    ```bash
-   $ cd $OPTAB/eos/FastChem
-   $ ../src/convert_Fastchem $FASTCHEM/output/table.dat
+   cd $OPTAB/eos/FastChem
+   ../src/convert_Fastchem $FASTCHEM/output/table.dat
    ```
-   - The converted HDF5 file `table.h5` can be visualized by the IDL code `eos.pro`. You need [TeXtoIDL](http://physics.mnstate.edu/craig/textoidl/) and [Coyote](http://www.idlcoyote.com/index.html) libraries to run the code.
+   - The converted HDF5 file `table.h5` can be visualized by a Python code:
 
      ```bash
-     $ export IDL_PATH=../idl:$PATH_TO_TEXTOIDL:$PATH_TO_COYOTE:"<IDL_DEFAULT>"
-     $ idl -e 'eos, fname="table.h5", arg="mmw", syms=4'
+     python3 ../python/eos.py table.h5 mmw
      ```
-     <img src="./eos/FastChem/table/eos.eps.png" width="400">
+     <img src="./eos/FastChem/table.png" width="400">
 
 3. Now execute the sample script `table.sh` located in `$OPTAB/sample/` to run `Optab`:
    ```bash
