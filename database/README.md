@@ -7,6 +7,12 @@ This directory stores opacity databases used in Optab.
 > - As for molecular line lists, we recommend to start with HITRAN/HITEMP since Exomol database is gigantic.
 
 ---
+### `h5/`
+- This directory is the storage for the files in the HDF5 format made for `Optab`.
+- Make this directory first.
+```
+mkdir h5/
+```
 
 ### `1016620_Supplementary_Data/`
 - This directory stores free-free Gaunt factor data by [van Hoof et al. (2014)](https://academic.oup.com/mnras/article/444/1/420/1016620).
@@ -102,7 +108,7 @@ wget -r -np -nH --cut-dirs=3 -P photo -R "index.html*" https://www.pa.uky.edu/~v
    ```
    bash ../fetch/get_hitemp_multi.sh
    ```
-   Note that running `get_hitemp_multi.sh` is only for H<sub>2</sub>O and CO<sub>2</sub>, where the data is divided into multiple files. For other species, simply download a single bzip2ed par file to `/original` and bunzip2 it before step 2. 
+   Note that running `get_hitemp_multi.sh` is only for H<sub>2</sub>O and CO<sub>2</sub>, where the data is divided into multiple files. For other species, simply download a single bzip2ed par file to `original/` and bunzip2 it before step 2. 
 
 1. Break down the downloaded `.par` file to make separate `.par` files for different isotoplogue:
    ```bash
@@ -154,6 +160,3 @@ wget -r -np -nH --cut-dirs=3 -P photo -R "index.html*" https://www.pa.uky.edu/~v
    $ bash ../fetch/get_kurucz_gfgam.sh
    $ ../src/convert_gfgam_h5
    ```
-
-### `h5/`
-- This directory is the storage for the files in the HDF5 format made for `Optab`.
