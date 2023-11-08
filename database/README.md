@@ -27,18 +27,30 @@ wget -r -np -nH --cut-dirs=3 -P photo -R "index.html*" https://www.pa.uky.edu/~v
 
 ### `TOPbase/`
 - This directory is a workspace for [TOPbase: photoionization cross sections](http://cdsweb.u-strasbg.fr/topbase/xsections.html).
+1. Make the directory:
+   ```
+   mkdir TOPbase; cd TOPbase
+   ```
 1. Execute `get_topbase.py` to retrieve the cross section data:
    ```
-   % python3 ../fetch/get_topbase.py
+   python3 ../fetch/get_topbase.py
    ```
-2. Execute `convert_topbase_h5` to store the data in the specific HDF5 format for `Optab`:
+1. Execute `convert_topbase_h5` to store the data in the specific HDF5 format for `Optab`:
    ```
-   % ../src/convert_topbase_h5
+   ../src/convert_topbase_h5
    ```
 
 ### `NIST/`
 - This directory is a workspace for NIST [Atomic Weights and Isotopic Compositions with Relative Atomic Masses](https://www.nist.gov/pml/atomic-weights-and-isotopic-compositions-relative-atomic-masses) and [Atomic Spectra Database Levels](https://physics.nist.gov/PhysRefData/ASD/levels_form.html).
-1. Execte `get_nist.py` to retrieve the data:
+1. Make the directory:
+   ```
+   mkdir NIST; cd NIST
+   ```
+1. Execute `get_nist_atomic.sh` to retrieve the atomic data:
+   ```
+   bash ../fetch/get_nist_atomic.sh
+   ```
+1. Execute `get_nist.py` to retrieve the level data:
    ```
    python3 ../fetch/get_nist.py
    ```
@@ -46,47 +58,61 @@ wget -r -np -nH --cut-dirs=3 -P photo -R "index.html*" https://www.pa.uky.edu/~v
    ```
    python3 ../fetch/get_nist_parallel.py
    ```
-2. Execute `convert_nist_h5` to store the data in the specifice HDF5 format for `Optab`:
+1. Execute `convert_nist_h5` to store the data in the specifice HDF5 format for `Optab`:
    ```
-   % ../src/convert_nist_h5
+   ../src/convert_nist_h5
    ```
 
 ### `HITRAN/`
 - This directory is a workspace for [HITRAN](https://hitran.org/) molecular linelists.
+1. Make the directory:
+   ```
+   mkdir HITRAN; cd HITRAN
+   ```
 1. Execulte `get_hitran_meta.sh` to retrieve [HITRAN Isotopologue Metadata](https://hitran.org/docs/iso-meta/):
    ```
-   % bash ../fetch/get_hitran_meta.sh
+   bash ../fetch/get_hitran_meta.sh
    ```
-> The following procedure is for H<sub>2</sub>O in HITRAN. Repeat it for other species.
-2. Get linelists (`.par` files):
+1. Execute `get_hitran.py` to retrieve the partition function files:
+   ```
+   python3 ../fetch/get_hitran_Qs.py
+   ```
+#### `HITRAN` database
+> The following procedure is for H<sub>2</sub>O in HITRAN. Repeat it for every single species.
+1. Get linelists (`.par` files):
    1. Goto [Line-by-Line Search](https://hitran.org/lbl/).
    2. "Select Molecules" &rarr; check 1. H2O
    3. "Select Isotopologues" &rarr; check all isotopologues
    4. "Select Wavenumber / Wavelength Range" &rarr; leave blank for &nu;<sub>max</sub>
-   5. "Select or Create Output Format" &rarr; do nothing
+   5. "Select or Create Output Format" &rarr; .par (160 chars)
    6. "Start Data Search> Search Results" &rarr; download the "Output transitions data (160-character `.par` format)" as `original/01_HITRAN.par`. Here, `"01"` is the two digits [molecule ID](https://hitran.org/docs/molec-meta/) of H<sub>2</sub>O.
-3. Break down the downloaded `.par` file to make separate `.par` files for different isotoplogue:
+1. Break down the downloaded `.par` file to make separate `.par` files for different isotoplogue:
    ```bash
-   $ ../src/preproc_hitran original/01_HITRAN.par
+   ../src/preproc_hitran original/01_HITRAN.par
    ```
-4. Convert each isotopologue `.par` file to an HDF5 file in the specific format for `Optab`:
+1. Convert each isotopologue `.par` file to an HDF5 file in the specific format for `Optab`:
    ```bash
    $ ../src/convert_lines_h5
    ```   
-> The following procedure is for H<sub>2</sub>O in HITEMP. Repeat it for other species.
-2. Get linelists (`.par` files):
-   1. Goto https://hitran.org/hitemp/data/HITEMP-2010/H2O_line_list/.
-   2. Download all zipped files and unzip them.
-   3. Concatenate all unzipped files into a single file, `original/01_HITEMP2010.par`.
+1. Go back to step 1 for the next species.
 
-3. Break down the downloaded `.par` file to make separate `.par` files for different isotoplogue:
+#### `HITEMP` database
+> The following procedure is for H<sub>2</sub>O in HITEMP. Repeat it for every single species. 
+1. Edit `../fetch/get_hitemp_multi.sh` appropriately and run it to get a single .par file:
+   ```
+   bash ../fetch/get_hitemp_multi.sh
+   ```
+   Note that running `get_hitemp_multi.sh` is only for H<sub>2</sub>O and CO<sub>2</sub>, where the data is divided into multiple files. For other species, simply download a single bzip2ed par file to `/original` and bunzip2 it before step 2. 
+
+1. Break down the downloaded `.par` file to make separate `.par` files for different isotoplogue:
    ```bash
    $ ../src/preproc_hitran original/01_HITEMP2010.par
    ```
-4. Convert each isotopologue `.par` file to an HDF5 file in the specific format for `Optab`:
+1. Convert each isotopologue `.par` file to an HDF5 file in the specific format for `Optab`:
    ```bash
    $ ../src/convert_lines_h5
    ```
+1. Go back to step 1 for the next species.    
 
 ### `Exomol/`
 - This directory is a workspace for [Exomol](https://www.exomol.com/) molecular linelists. 

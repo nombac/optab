@@ -24,19 +24,18 @@ w3m -dump -cols 120 "https://hitran.org/docs/iso-meta/" \
 
 sed -i -e 's/ × 10/E/' $dir/hitran_meta.txt
 
-#partition functions
-echo 'copy partition functions...'
-mkdir -p Q/
-for n in `seq 1 148` ; do
-   fname="q${n}.txt"
-   m=`echo ${n} | awk '{printf("%03d\n"),$1}'`
-   oname="q${m}.txt"
-   URL=https://hitran.org/data/Q/${fname}
-   wget --spider ${URL} 2>&1 | grep "Not Found"
-   if [ "$?" -ne 0 ]
-   then
-	echo ${URL} is fetched...
-	wget -q -O ${dir}/Q/${fname} ${URL}
-   fi
-done
-wget --quiet --no-directories -r --no-parent -A 'q*.txt' https://hitran.org/data/Q/ -P $dir/Q
+# partition functions
+# echo 'copy partition functions...'
+# for n in `seq 1 150` ; do
+#     fname="q${n}.txt"
+#     m=`echo ${n} | awk '{printf("%03d\n"),$1}'`
+#     oname="q${m}.txt"
+#     URL=https://hitran.org/data/Q/${fname}
+#     wget --spider ${URL} 2>&1 | grep "Not Found"
+#     if [ "$?" -ne 0 ]
+#     then
+# 	echo ${URL} is fetched...
+# 	wget -q -O ${dir}/Q/${fname} ${URL}
+#     fi
+# done
+#wget --quiet --no-directories -r --no-parent -A 'q*.txt' https://hitran.org/data/Q/ -P $dir/Q
