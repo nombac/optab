@@ -105,7 +105,7 @@ wget -r -np -nH --cut-dirs=3 -P photo -R "index.html*" https://www.pa.uky.edu/~v
 #### `HITEMP` database
 > The following procedure is for H<sub>2</sub>O in HITEMP. Repeat it for every single species. 
 1. Edit `../fetch/get_hitemp_multi.sh` appropriately and run it to get a single .par file:
-   ```
+   ```bash
    bash ../fetch/get_hitemp_multi.sh
    ```
    Note that running `get_hitemp_multi.sh` is only for H<sub>2</sub>O and CO<sub>2</sub>, where the data is divided into multiple files. For other species, simply download a single bzip2ed par file to `original/` and bunzip2 it before step 2. 
@@ -155,8 +155,9 @@ wget -r -np -nH --cut-dirs=3 -P photo -R "index.html*" https://www.pa.uky.edu/~v
    $ ls linelists/*.dat > list_convert.txt
    $ ../src/convert_lines_h5
    ```
-2. Execute `get_kurucz_gfgam.sh` to get the level data file `gf????.gam` for all species available, and execute `convert_gfgam_h5` to generate an HDF5 file for `Optab`:
+2. Execute `get_kurucz_gfgam.sh` to get the level data file `gf????.gam` for all species available (ignore `Not Found` errors), and execute `convert_gfgam_h5` to generate an HDF5 file for `Optab`:
    ```bash
-   $ bash ../fetch/get_kurucz_gfgam.sh
-   $ ../src/convert_gfgam_h5
+   mkdir atoms
+   bash ../fetch/get_kurucz_gfgam.sh
+   ../src/convert_gfgam_h5
    ```
