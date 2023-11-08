@@ -3,6 +3,7 @@
 
 #define ATOMIC_IONS
 #define FASTCHEM_ORIGINAL
+#define OPTAB_DATABASE_DIR '/Volumes/Storage/database/'    
 
 PROGRAM prep_FastChem
 
@@ -290,7 +291,7 @@ CONTAINS
     
     !-----------------------------------------------------------------------------
     ! 同位体置換体の質量・存在比・分配関数
-    CALL h5Fopen_f('../../../database/h5/NIST.h5', H5F_ACC_RDONLY_F, file_spec, error)
+    CALL h5Fopen_f(OPTAB_DATABASE_DIR//'h5/NIST.h5', H5F_ACC_RDONLY_F, file_spec, error)
     CALL h5Gopen_f(file_spec, 'prop', grp_prop, error) 
     WRITE(natm,'(I3.3)') na
     WRITE(nion,'(I2.2)') ni
@@ -316,7 +317,7 @@ CONTAINS
     CALL h5Fclose_f(file_spec, error)
 
 #ifndef UNUSE_GFGAM
-    CALL h5Fopen_f('../../../database/h5/gfgam.h5', H5F_ACC_RDONLY_F, file_spec, error)
+    CALL h5Fopen_f(OPTAB_DATABASE_DIR//'h5/gfgam.h5', H5F_ACC_RDONLY_F, file_spec, error)
     WRITE(natm,'(I3.3)') na
     WRITE(nion,'(I2.2)') ni
     ! ENERGY AND GTOT
