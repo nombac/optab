@@ -9,10 +9,6 @@ This directory stores opacity databases used in Optab.
 ---
 ### `h5/`
 - This directory is the storage for the files in the HDF5 format made for `Optab`.
-- Make this directory first.
-   ```
-   mkdir h5/
-   ```
 
 ### `1016620_Supplementary_Data/`
 - This directory stores free-free Gaunt factor data by [van Hoof et al. (2014)](https://academic.oup.com/mnras/article/444/1/420/1016620).
