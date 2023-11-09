@@ -38,7 +38,7 @@ This directory stores opacity databases used in Optab.
    cd TOPbase/
    ```
    ```
-   python3 ../fetch/get_topbase.py
+   python3 get_topbase.py
    ```
 
 ### `NIST/`
@@ -48,9 +48,9 @@ This directory stores opacity databases used in Optab.
    cd NIST/
    ```
    ```
-   python3 ../fetch/get_nist_parallel.py
+   python3 get_nist_parallel.py
    ```
-   or try `../fetch/get_nist.py` (slower) if you encounter a network issue.
+   or try `get_nist.py` (slower) if you encounter a network issue.
 
 ### `HITRAN/`
 - This directory is a workspace for [HITRAN](https://hitran.org/) molecular linelists.
@@ -59,7 +59,7 @@ This directory stores opacity databases used in Optab.
    cd HITRAN/
    ```
    ```
-   python3 ../fetch/get_hitran.py
+   python3 get_hitran.py
    ```
 1. Get linelists (`.par` files):
    1. `HITRAN` lines (e.g. H2O; repeat this procedure for other species.)
@@ -70,13 +70,13 @@ This directory stores opacity databases used in Optab.
       1. "Select or Create Output Format" &rarr; .par (160 chars)
       1. "Start Data Search> Search Results" &rarr; download the "Output transitions data (160-character `.par` format)" as `original/01_HITRAN.par`. Here, `"01"` is the two digits [molecule ID](https://hitran.org/docs/molec-meta/) of H<sub>2</sub>O.
    1. `HITEMP` lines
-      1. Go to [HITEMP](https://hitran.org/hitemp/) and download bzip2ed `.par` files to `original/` and bunzip2 them. Note that tne data for H<sub>2</sub>O and CO<sub>2</sub> is divided into multiple files, respectively. In these cases, edit `../fetch/get_hitemp_multi.sh` appropriately and run it to get a single .par file:
+      1. Go to [HITEMP](https://hitran.org/hitemp/) and download bzip2ed `.par` files to `original/` and bunzip2 them. Note that tne data for H<sub>2</sub>O and CO<sub>2</sub> is divided into multiple files, respectively. In these cases, edit `get_hitemp_multi.sh` appropriately and run it to get a single .par file:
          ```bash
-         bash ../fetch/get_hitemp_multi.sh
+         bash get_hitemp_multi.sh
          ```
 1. Break down the downloaded `.par` files in `original/` to make separate `.par` files for different isotoplogue, and convert them to HDF5 files:
    ```bash
-   bash ./preproc_and_convert_HITRAN.sh
+   bash preproc_and_convert_HITRAN.sh
    ```
 
 
@@ -111,9 +111,9 @@ This directory stores opacity databases used in Optab.
 - This directory is a workspace for [Kurucz atomic linelinsts](http://kurucz.harvard.edu/linelists.html)
 1. Execute `get_kurucz_linelists.sh` to retrieve two linelists, `gfall08oct17.dat` and `gfpred26apr18.dat`, from Kurucz database and convert them to HDF5 files for `Optab`:
    ```bash
-   bash ../fetch/get_kurucz_linelists.sh
+   bash get_kurucz_linelists.sh
    ```
 2. Execute `get_kurucz_gfgam.sh` to get the level data files `gf????.gam` for all species available (ignore `Not Found` errors) and convert them to an HDF5 file for `Optab`:
    ```bash
-   python3 ../fetch/get_kurucz_gfgam.py
+   python3 get_kurucz_gfgam.py
    ```
