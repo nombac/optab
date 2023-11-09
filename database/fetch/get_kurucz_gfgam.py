@@ -51,3 +51,7 @@ with ThreadPoolExecutor() as executor:
 for result in results:
     print(result)
 
+# Convert fetched files to an HDF5 file for Optab
+import subprocess
+subprocess.call(["../src/convert_gfgam_h5"])
+

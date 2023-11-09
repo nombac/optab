@@ -113,3 +113,7 @@ with ThreadPoolExecutor() as executor:
 
 #         # Download and process photoionization cross section data
 #         download_and_process(nz, ne, 'p', 'xsectn')
+
+# Convert fetched files to an HDF5 file for Optab
+import subprocess
+subprocess.call(["../src/convert_topbase_h5"])

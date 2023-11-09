@@ -39,7 +39,7 @@ with ThreadPoolExecutor(max_workers=10) as executor:
     futures = {executor.submit(download_partition_function, n): n for n in range(1, 149)}
     
     # Use tqdm to create a progress bar for the futures as they complete
-    for future in tqdm(as_completed(futures), total=len(futures)):
+    for future in tqdm(as_completed(futures), total=len(futures), desc="Downloading Q files..."):
         url = futures[future]
         try:
             # Check the result of the future
@@ -47,3 +47,8 @@ with ThreadPoolExecutor(max_workers=10) as executor:
             #print(result)
         except Exception as exc:
             print(f"Partition function {url} generated an exception: {exc}")
+
+# Convert fetched files to an HDF5 file for Optab
+import subprocess
+subprocess.call(["bash", "../fetch/get_hitran_meta.sh"])
+

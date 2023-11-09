@@ -67,3 +67,7 @@ with tqdm.tqdm(total=total_iterations) as pbar:
             pbar.set_description(f"Processing aaa={aaa}, bb={bb}")
             pbar.update(1)
 
+# Convert fetched files to an HDF5 file for Optab
+import subprocess
+subprocess.call(["bash", "../fetch/get_nist_atomic.sh"])
+subprocess.call(["../src/convert_nist_h5"])

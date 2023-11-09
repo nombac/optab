@@ -10,115 +10,75 @@ This directory stores opacity databases used in Optab.
 ### `h5/`
 - This directory is the storage for the files in the HDF5 format made for `Optab`.
 - Make this directory first.
-```
-mkdir h5/
-```
+   ```
+   mkdir h5/
+   ```
 
 ### `1016620_Supplementary_Data/`
 - This directory stores free-free Gaunt factor data by [van Hoof et al. (2014)](https://academic.oup.com/mnras/article/444/1/420/1016620).
-- Extract their [supplementary data](https://academic.oup.com/mnras/article/444/1/420/1016620#supplementary-data) in this directory.
-```
-unzip ~/Downloads/1016620_Supplementary_Data.zip -d 1016620_Supplementary_Data
-```
+- Download their [supplementary data](https://academic.oup.com/mnras/article/444/1/420/1016620#supplementary-data) and extract it in this directory.
+   ```
+   unzip ~/Downloads/1016620_Supplementary_Data.zip -d 1016620_Supplementary_Data
+   ```
 
 ### `Karzas_Latter_1961.tsv`
 - This file is "Table I" (bound-free Gaunt factors) in [Karzas and Latter (1961)](http://articles.adsabs.harvard.edu/pdf/1961ApJS....6..167K) (&copy; AAS. Reproduced with permission).
 
 ### `photo/`
-- This directory contains [Verner's photoionization cross sections data](https://www.pa.uky.edu/~verner/photo.html).
+- This directory stores [Verner's photoionization cross sections data](https://www.pa.uky.edu/~verner/photo.html).
 - Copy all files in https://www.pa.uky.edu/~verner/dima/photo/ into this directory.
-```
-wget -r -np -nH --cut-dirs=3 -P photo -R "index.html*" https://www.pa.uky.edu/~verner/dima/photo/
-```
+   ```
+   wget -r -np -nH --cut-dirs=3 -P photo -R "index.html*" https://www.pa.uky.edu/~verner/dima/photo/
+   ```
 
 ### `TOPbase/`
 - This directory is a workspace for [TOPbase: photoionization cross sections](http://cdsweb.u-strasbg.fr/topbase/xsections.html).
-1. Make the directory:
+1. Execute `get_topbase.py` to retrieve the cross section data files and convert them to a specific HDF5 format for `Optab`:
    ```
-   mkdir TOPbase; cd TOPbase
+   cd TOPbase/
    ```
-1. Execute `get_topbase.py` to retrieve the cross section data:
    ```
    python3 ../fetch/get_topbase.py
-   ```
-1. Execute `convert_topbase_h5` to store the data in the specific HDF5 format for `Optab`:
-   ```
-   ../src/convert_topbase_h5
    ```
 
 ### `NIST/`
 - This directory is a workspace for NIST [Atomic Weights and Isotopic Compositions with Relative Atomic Masses](https://www.nist.gov/pml/atomic-weights-and-isotopic-compositions-relative-atomic-masses) and [Atomic Spectra Database Levels](https://physics.nist.gov/PhysRefData/ASD/levels_form.html).
-1. Make the directory:
+1. Execute `get_nist_parallel.py` to retrieve the level/atomic data and convert them to a specific HDF5 format for `Optab`:
    ```
-   mkdir NIST; cd NIST
+   cd NIST/
    ```
-1. Execute `get_nist_atomic.sh` to retrieve the atomic data:
-   ```
-   bash ../fetch/get_nist_atomic.sh
-   ```
-1. Execute `get_nist.py` to retrieve the level data:
-   ```
-   python3 ../fetch/get_nist.py
-   ```
-   or try `get_nist_parallel.py` (faster, but may cause network issues)
    ```
    python3 ../fetch/get_nist_parallel.py
    ```
-1. Execute `convert_nist_h5` to store the data in the specifice HDF5 format for `Optab`:
-   ```
-   ../src/convert_nist_h5
-   ```
+   or try `../fetch/get_nist.py` (slower) if you encounter a network issue.
 
 ### `HITRAN/`
 - This directory is a workspace for [HITRAN](https://hitran.org/) molecular linelists.
-1. Make the directory:
+1. Execute `get_hitran.py` to retrieve [HITRAN Isotopologue Metadata](https://hitran.org/docs/iso-meta/) and the partition function files:
    ```
-   mkdir HITRAN; cd HITRAN
+   cd HITRAN/
    ```
-1. Execulte `get_hitran_meta.sh` to retrieve [HITRAN Isotopologue Metadata](https://hitran.org/docs/iso-meta/):
-   ```
-   bash ../fetch/get_hitran_meta.sh
-   ```
-1. Execute `get_hitran.py` to retrieve the partition function files:
    ```
    python3 ../fetch/get_hitran_Qs.py
    ```
-#### `HITRAN` database
-> The following procedure is for H<sub>2</sub>O in HITRAN. Repeat it for every single species.
 1. Get linelists (`.par` files):
-   1. Goto [Line-by-Line Search](https://hitran.org/lbl/).
-   2. "Select Molecules" &rarr; check 1. H2O
-   3. "Select Isotopologues" &rarr; check all isotopologues
-   4. "Select Wavenumber / Wavelength Range" &rarr; leave blank for &nu;<sub>max</sub>
-   5. "Select or Create Output Format" &rarr; .par (160 chars)
-   6. "Start Data Search> Search Results" &rarr; download the "Output transitions data (160-character `.par` format)" as `original/01_HITRAN.par`. Here, `"01"` is the two digits [molecule ID](https://hitran.org/docs/molec-meta/) of H<sub>2</sub>O.
-1. Break down the downloaded `.par` file to make separate `.par` files for different isotoplogue:
+   1. `HITRAN` lines (e.g. H2O; repeat this procedure for other species.)
+      1. Goto [Line-by-Line Search](https://hitran.org/lbl/).
+      1. "Select Molecules" &rarr; check 1. H2O
+      1. "Select Isotopologues" &rarr; check all isotopologues
+      1. "Select Wavenumber / Wavelength Range" &rarr; leave blank for &nu;<sub>max</sub>
+      1. "Select or Create Output Format" &rarr; .par (160 chars)
+      1. "Start Data Search> Search Results" &rarr; download the "Output transitions data (160-character `.par` format)" as `original/01_HITRAN.par`. Here, `"01"` is the two digits [molecule ID](https://hitran.org/docs/molec-meta/) of H<sub>2</sub>O.
+   1. `HITEMP` lines
+      1. Go to [HITEMP](https://hitran.org/hitemp/) and download bzip2ed `.par` files to `original/` and bunzip2 them. Note that tne data for H<sub>2</sub>O and CO<sub>2</sub> is divided into multiple files, respectively. In these cases, edit `../fetch/get_hitemp_multi.sh` appropriately and run it to get a single .par file:
+         ```bash
+         bash ../fetch/get_hitemp_multi.sh
+         ```
+1. Break down the downloaded `.par` files in `original/` to make separate `.par` files for different isotoplogue, and convert them to HDF5 files:
    ```bash
-   ../src/preproc_hitran original/01_HITRAN.par
+   bash ./preproc_and_convert_HITRAN.sh
    ```
-1. Convert each isotopologue `.par` file to an HDF5 file in the specific format for `Optab`:
-   ```bash
-   $ ../src/convert_lines_h5
-   ```   
-1. Go back to step 1 for the next species.
 
-#### `HITEMP` database
-> The following procedure is for H<sub>2</sub>O in HITEMP. Repeat it for every single species. 
-1. Edit `../fetch/get_hitemp_multi.sh` appropriately and run it to get a single .par file:
-   ```bash
-   bash ../fetch/get_hitemp_multi.sh
-   ```
-   Note that running `get_hitemp_multi.sh` is only for H<sub>2</sub>O and CO<sub>2</sub>, where the data is divided into multiple files. For other species, simply download a single bzip2ed par file to `original/` and bunzip2 it before step 2. 
-
-1. Break down the downloaded `.par` file to make separate `.par` files for different isotoplogue:
-   ```bash
-   $ ../src/preproc_hitran original/01_HITEMP2010.par
-   ```
-1. Convert each isotopologue `.par` file to an HDF5 file in the specific format for `Optab`:
-   ```bash
-   $ ../src/convert_lines_h5
-   ```
-1. Go back to step 1 for the next species.    
 
 ### `Exomol/`
 - This directory is a workspace for [Exomol](https://www.exomol.com/) molecular linelists. 
@@ -149,16 +109,11 @@ wget -r -np -nH --cut-dirs=3 -P photo -R "index.html*" https://www.pa.uky.edu/~v
 
 ### `Kurucz/`
 - This directory is a workspace for [Kurucz atomic linelinsts](http://kurucz.harvard.edu/linelists.html)
-1. Execute `get_kurucz_linelists.sh`, which retrieves two linelists, `gfall08oct17.dat` and `gfpred26apr18.dat`, from Kurucz database and puts them in the subdirectory `linelists/`. Edit `list_convert.txt` to list the relative paths of the linelists, and execute `convert_lines_h5` to generate HDF5 files for `Optab`:
+1. Execute `get_kurucz_linelists.sh` to retrieve two linelists, `gfall08oct17.dat` and `gfpred26apr18.dat`, from Kurucz database and convert them to HDF5 files for `Optab`:
    ```bash
    bash ../fetch/get_kurucz_linelists.sh
-   ls linelists/gfall08oct17.dat > list_convert.txt
-   ../src/convert_lines_h5
-   ls linelists/gfpred26apr18.dat > list_convert.txt
-   ../src/convert_lines_h5
    ```
-2. Execute `get_kurucz_gfgam.sh` to get the level data file `gf????.gam` for all species available (ignore `Not Found` errors), and execute `convert_gfgam_h5` to generate an HDF5 file for `Optab`:
+2. Execute `get_kurucz_gfgam.sh` to get the level data files `gf????.gam` for all species available (ignore `Not Found` errors) and convert them to an HDF5 file for `Optab`:
    ```bash
    python3 ../fetch/get_kurucz_gfgam.py
-   ../src/convert_gfgam_h5
    ```
