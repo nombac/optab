@@ -59,7 +59,7 @@ This directory stores opacity databases used in Optab.
    cd HITRAN/
    ```
    ```
-   python3 ../fetch/get_hitran_Qs.py
+   python3 ../fetch/get_hitran.py
    ```
 1. Get linelists (`.par` files):
    1. `HITRAN` lines (e.g. H2O; repeat this procedure for other species.)
