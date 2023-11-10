@@ -54,7 +54,7 @@ def opac(dir_path, mean, syms):
                           ros_tot if mean == 'ross' else
                           pla_tot if mean == 'pla' else
                           pla2_tot,
-                          s=syms, cmap='viridis', norm=plt.Normalize(vmin=vmin, vmax=vmax), marker='s')
+                          s=syms, cmap='jet', norm=plt.Normalize(vmin=vmin, vmax=vmax), marker='s')
     plt.yscale('log')
     plt.xscale('log')
     plt.xlabel('T [K]')
@@ -62,7 +62,6 @@ def opac(dir_path, mean, syms):
     plt.title(title)
     plt.colorbar(scatter, label=btitle)
     plt.grid(True)
-    plt.show()
 
     # Save the plot in different formats
     file_basename = os.path.join(dir_path, 'output', mean)
@@ -70,6 +69,7 @@ def opac(dir_path, mean, syms):
         plt.savefig(f'{file_basename}.{ext}', format=ext, transparent=True)
         print(f'Output file: {file_basename}.{ext}')
 
+    plt.show()
 
 def main():
     # Create the parser

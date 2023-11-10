@@ -192,16 +192,15 @@ Here, we explain how to make opacity tables from a chemical abundance table gene
    - two-temperature Planck-mean opacity
    - monochromatic absorption and scattering opacities
 
-   These quantities can be visualized by the IDL codes `opac.pro` and `mono.pro` in `$OPTAB/sample/` as follows. The fourth command plots monochromatic opacities at layer #80. You need [TeXtoIDL](http://physics.mnstate.edu/craig/textoidl/) and [Coyote](http://www.idlcoyote.com/index.html) libraries to run the codes.
-   ```bash
-   $ export IDL_PATH=./idl:$PATH_TO_TEXTOIDL:$PATH_TO_COYOTE:"<IDL_DEFAULT>"
-   $ idl -e 'opac, dir="table", mean="ross", syms=2.5'
-   $ idl -e 'opac, dir="table", mean="pla", syms=2.5'
-   $ idl -e 'opac, dir="table", mean="pla2", syms=2.5'
-   $ idl -e 'mono, dir="table", layer=30'
-   $ idl -e 'mono, dir="table", layer=80'
-   ```
-   <img src="./sample/table/output/ross.png" width="400"><img src="./sample/table/output/pla.png" width="400"><img src="./sample/table/output/pla2.png" width="400"><img src="./sample/table/output/mono_00030.png" width="400"><img src="./sample/table/output/mono_00080.png" width="400">
+  These quantities can be visualized by the Python codes `opac.py` and `mono.py` in `$OPTAB/sample/python` as follows. The fourth command plots monochromatic opacities at layer #30. 
+  ```bash
+  python3 python/opac.py table ross 150
+  python3 python/opac.py table pla 150
+  python3 python/opac.py table pla2 150
+  python3 python/mono.py table 30
+  python3 python/mono.py table 300
+  ```
+   <img src="./sample/table/output/ross.png" width="400"><img src="./sample/table/output/pla.png" width="400"><img src="./sample/table/output/pla2.png" width="400"><img src="./sample/table/output/mono_00030.png" width="400"><img src="./sample/table/output/mono_00300.png" width="400">
 
 ---
 **EOF**
