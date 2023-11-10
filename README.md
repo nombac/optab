@@ -1,11 +1,11 @@
 # **`Optab`**
 ### **Public Fortran90 code package for generating ideal-gas opacity tables**
 
-To perform radiation hydrodynamics simulations, both the equation of state and opacity are necessary. In principle, these two should be derived from the same chemical equilibrium abundances, which often is not the case. `Optab` computes opacity based on user-provided chemical equilibrium abundances, and outputs mean opacities as well as monochromatic opacities. Consequently, one can have opacity tables consistent with one's equation of state.
+To execute radiation hydrodynamics simulations, the equation of state and opacity are both critical components. Ideally, these elements should originate from the same set of chemical equilibrium abundances, yet this alignment is not always practiced. `Optab` is designed to calculate opacity based on the chemical equilibrium abundances provided by the user. It outputs both mean and monochromatic opacities, thus enabling the creation of opacity tables that are consistent with the user's equation of state.
 
 <img src="./sample/tab100/input/eos/eos.eps.png" width="160"><img src="./sample/tab100/output/ross.png" width="160"><img src="./sample/tab100/output/pla.png" width="160"><img src="./sample/tab100/output/pla2.png" width="160"><img src="./sample/tab100/output/mono_03000.png" width="160">
 
-> In case you don't have your own chemical equilibrium solver, we recommend to use public solvers `FastChem` or `TEA` to compute chemical abundances, for which `Optab` provides interfaces; see an example below.
+If you possess a pre-existing dataset of chemical equilibrium abundances, visit our [Wiki](https://github.com/nombac/optab/wiki/How-to-store--chemical-abundances-in-HDF5-format) for instructions on converting your data into the specific HDF5 format required by `Optab`. For those without such data, we recommend utilizing well-established public solvers like FastChem or TEA. `Optab` offers interfaces compatible with these solvers; for detailed instructions, refer to the example provided below.
 
 ## Author
 Shigenobu Hirose (JAMSTEC, shirose@jamstec.go.jp)
