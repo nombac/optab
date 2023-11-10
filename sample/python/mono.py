@@ -52,12 +52,12 @@ def generate_plot(dir_path, layer):
     # Add text for tmp and pre
     plt.text(0.05, 0.15, f'T = {tmp.item():.2f} K', transform=plt.gca().transAxes, fontsize=12)
     plt.text(0.05, 0.10, f'P = {pre.item():.2e} Ba', transform=plt.gca().transAxes, fontsize=12)
-    plt.show()
     
     plt.savefig(f'{ps_name}.pdf', format='pdf', transparent=True)
     plt.savefig(f'{ps_name}.png', format='png', transparent=True)
 
-    print(f'Output files: {ps_name}.eps, {ps_name}.pdf, {ps_name}.png')
+    plt.show()
+    print(f'Output files: {ps_name}.pdf, {ps_name}.png')
 
 def main():
     parser = argparse.ArgumentParser(description='Monochromatic Opacity Plotter')
