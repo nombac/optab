@@ -73,7 +73,7 @@ def main():
 
     # Convert fetched files to an HDF5 file for Optab
     import subprocess
-    subprocess.call(["bash", "../fetch/get_nist_atomic.sh"])
+    subprocess.call(["bash", "get_nist_atomic.sh"])
     subprocess.call(["../src/convert_nist_h5"])
 
 if __name__ == "__main__":

@@ -50,5 +50,5 @@ with ThreadPoolExecutor(max_workers=10) as executor:
 
 # Convert fetched files to an HDF5 file for Optab
 import subprocess
-subprocess.call(["bash", "../fetch/get_hitran_meta.sh"])
+subprocess.call(["bash", "get_hitran_meta.sh"])
 
