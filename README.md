@@ -98,7 +98,7 @@ Here, we explain how to make opacity tables from a chemical abundance table gene
    - The converted HDF5 file `table.h5` can be visualized by a Python code:
 
      ```bash
-     python3 ../python/eos.py table.h5 mmw
+     python3 ../python/eos.py table.h5 mmw --syms=100
      ```
      <img src="./eos/FastChem/table.png" width="400">
 
