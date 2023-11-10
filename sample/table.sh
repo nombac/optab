@@ -2,9 +2,9 @@
 
 set -x -e
 
-export EOS='/Users/shirose/Downloads/optab/eos/FastChem/table.h5'
-export OPTAB='/Users/shirose/Downloads/optab'
-export DATABASE='/Users/shirose/database'
+export EOS='/Volumes/Storage/optab/eos/FastChem/table.h5'
+export OPTAB='/Volumes/Storage/optab'
+export DATABASE='/Volumes/Storage/optab/database'
 export MPIBIN='/opt/local/bin'
   
 
@@ -77,9 +77,9 @@ cat <<EOF > input/species_id.dat
 11	NH3	15N-1H3			1	HITRAN				0	BYTe-15		
 12	HNO3	1H-14N-16O3		1	HITRAN				0	AIJS		
 12	HNO3	1H-15N-16O3		1	HITRAN						
-13	OH	16O-1H			0	HITRAN	1	HITEMP2010	0	MoLLIST		
-13	OH	18O-1H			0	HITRAN	1	HITEMP2010				
-13	OH	16O-2H			0	HITRAN	1	HITEMP2010				
+13	OH	16O-1H			0	HITRAN	1	HITEMP2020	0	MoLLIST		
+13	OH	18O-1H			0	HITRAN	1	HITEMP2020				
+13	OH	16O-2H			0	HITRAN	1	HITEMP2020				
 14	HF	1H-19F		 	1	HITRAN				0	Coxon-Hajig		
 14	HF	2H-19F			1	HITRAN						
 15	HCl	1H-35Cl			1	HITRAN						
