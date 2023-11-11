@@ -3,7 +3,7 @@
 This section details the creation of opacity tables using a chemical abundance table from [`FastChem`](https://github.com/exoclime/FastChem). Ensure `FastChem` is set up before proceeding. The variables `$FASTCHEM` and `$OPTAB` denote the root directories of FastChem and Optab, respectively.
 
 1. **Generate a Chemical Abundance Table with `FastChem`**\
- Follow the instructions described in  [`work/FastChem-lnk_interpolate_dev/README.md`](work/FastChem-lnk_interpolate_dev/README.md). In the default setting, the grid points are 21 x 21, equally distributed in the log T - log P plane; see the image below. (If you intend to use an existing dataset of chemical equilibrium abundances, see [eos/README.md](eos/README.md).)
+ Follow the instructions described in  [`work/FastChem-lnk_interpolate_dev/README.md`](../work/FastChem-lnk_interpolate_dev/README.md). In the default setting, the grid points are 21 x 21, equally distributed in the log T - log P plane; see the image below. (If you intend to use an existing dataset of chemical equilibrium abundances, see [eos/README.md](../eos/README.md).)
 
 2. **Convert `FastChem` Output to an `optab`-compatible HDF5 File**
    ```bash
