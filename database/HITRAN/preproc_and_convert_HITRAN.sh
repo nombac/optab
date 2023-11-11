@@ -1,10 +1,14 @@
 #!/bin/bash
 
+mkdir -p decomp
+
 for file in original/*.par
 do
-    echo $file...
-    echo preprocessing...
+    echo ""
+    echo "*** $file ****"
+    echo "preprocessing..."
     ../src/preproc_hitran $file
-    echo converting...
-    ../src/convert_lines_h5    
+    echo "converting..."
+    ../src/convert_lines_h5
+    echo "done"
 done
