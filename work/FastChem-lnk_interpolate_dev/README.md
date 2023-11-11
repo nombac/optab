@@ -39,6 +39,6 @@ In this section, we outline the process of running FastChem with tabulated lnK f
 1. **Run `FastChem:**
    ```
    mkdir output/
-   ./fastchem input/init.config_<label>
+   ./fastchem input/config.input_<label>
    ```
    - Find the created chemical abundance table at `output/<label>.dat`. Here, `<label>` is `table` in the default setting.
