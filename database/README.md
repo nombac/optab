@@ -5,7 +5,7 @@ This directory houses the opacity databases utilized by Optab.
 > ### Notes
 > - Retain the current directory structure, as Optab relies on relative path references.
 > - We recommend starting with the HITRAN/HITEMP database for molecular line lists, as the Exomol database's extensive size may be overwhelming for initial exploration.
-> - Please be aware that the scripts provided for downloading the databases may become obsolete if there are changes in the database formats. If you encounter such issues, kindly inform the author.
+> - Please be aware that the scripts provided for downloading the databases may become obsolete if there are changes in the database formats. If you encounter such issues, kindly inform the author (shirose@jamstec.go.jp).
 ---
 ### `h5/`
 - This directory serves as the repository for HDF5-formatted files created for `optab``.
