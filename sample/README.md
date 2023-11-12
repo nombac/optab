@@ -1,8 +1,5 @@
 # Running `Optab` example
 
->### **CAUTION**
-> The present version of `optab` has not been optimized for memory efficiency during MPI computations. Consequently, memory consumption escalates with an increase in parallelization. For instance, with a layer count of 101 x 101, the peak memory requirement stands at approximately 22GB for a serial computation, which would increase to 22GB multiplied by the number of MPI processes for parallel computation. Therefore, if your computer has limited memory capacity and you're using MPI for computation, it is advisable to begin with a minimal number of layers and closely observe the memory consumption before proceeding to full-scale calculations. 
-
 This section details the creation of opacity tables using a chemical abundance table from [`FastChem`](https://github.com/exoclime/FastChem). Ensure `FastChem` is set up before proceeding. The variables `$FASTCHEM` and `$OPTAB` denote the root directories of FastChem and Optab, respectively.
 
 1. **Generate a Chemical Abundance Table with `FastChem`**\
