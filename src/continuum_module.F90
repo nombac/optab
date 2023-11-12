@@ -12,18 +12,18 @@ MODULE continuum_module
 
 CONTAINS
 
-  SUBROUTINE brems_atom_vanhoof_2014(temp, grd, gaunt)
+  SUBROUTINE brems_atom_vanhoof_2014(temp, grd, gaunt, z)
     ! Gaunt factors for bremsstrahlung of positive atomic ions
     ! van Hoof et al. 2014, MNRAS, 444, 420
     USE const_module, ONLY : alpha, clight, k_bol, m_ele, h, rydberg
-    USE code_module, ONLY : ZnI
     IMPLICIT NONE
 
     REAL(REAL64), INTENT(IN) :: temp(:)
     REAL(REAL64), INTENT(IN) :: grd(:)
-    REAL(REAL64), INTENT(INOUT) :: gaunt(:,:,:)
+    REAL(REAL64), INTENT(INOUT) :: gaunt(:,:)
+    INTEGER(INT32) :: z
 
-    INTEGER(INT32) :: n, i, j, imax, jmax, ls, le, l, z
+    INTEGER(INT32) :: n, i, j, imax, jmax, ls, le, l
     REAL(REAL64), ALLOCATABLE :: g(:,:), gam2(:), u(:), u0(:)
     REAL(REAL64) :: step, gam2_min, u_min, gam20
 
@@ -58,10 +58,8 @@ CONTAINS
 
     DO l = ls, le
        u0(:) = LOG10((h * clight * grd(:)) / (k_bol * temp(l)))
-       DO z = 1, (ZnI/100)
-          gam20 = LOG10((z**2 * rydberg) / (k_bol * temp(l)))
-          CALL interp2d_yarr(gam20, u0(:), gam2(:), u(:), g(:,:), gaunt(:,l,z))
-       END DO
+       gam20 = LOG10((z**2 * rydberg) / (k_bol * temp(l)))
+       CALL interp2d_yarr(gam20, u0(:), gam2(:), u(:), g(:,:), gaunt(:,l))
     END DO
 
     DEALLOCATE(g, gam2, u)

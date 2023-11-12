@@ -104,6 +104,8 @@ PROGRAM main
   READ(5, NML=block_cyclic)
   CLOSE(5)
 
+  print *, 'TEST'
+
   ! SET MOLECULAR LINE SOURCES
   IF(myrk == 0) THEN
      CALL read_mol_source_list(n_species)
@@ -201,17 +203,18 @@ PROGRAM main
      END IF
      
      IF(brems_atomicions == 1) THEN
+        print *, 'brems start'
 #ifndef PHOENIX_BREMS
         call wtime(name='brems(atomic ion):')
-        ALLOCATE(out(ks:ke,js:je,1:(ZnI/100)))
+        ALLOCATE(out(ks:ke,js:je,NA:NA))
         fac_0 = SQRT(8d0 * alpha**6 * hbar**4 / (27d0 * pi * clight**2 * k_bol**3 * m_ele**3))
-        CALL brems_atom_vanHoof_2014(temp1(js:je), grd(:), out(:,js:je,:))
         DO z = 1, (ZnI/100)
+           CALL brems_atom_vanHoof_2014(temp1(js:je), grd(:), out(:,js:je,NA), z - ne)
            DO ne = 0, z - 1
               code = z * 100 + (z - ne)
               DO j = js, je
                  alp(:,j) = alp(:,j) + p_e1(j) * np1(code,j) * (z - ne)**2 / temp1(j)**1.5d0 * fac_0 * &
-                      (1d0 - EXP(-c2 * grd(:) / temp1(j))) * out(:,j,z - ne) / grd(:)**3
+                      (1d0 - EXP(-c2 * grd(:) / temp1(j))) * out(:,j,NA) / grd(:)**3
               END DO
            END DO
         END DO
@@ -367,7 +370,7 @@ PROGRAM main
      ! ***************
      ! LINE ABSORPTION
      ! ***************
-     
+     print *, 'start line'
      IF(line_molecules == 1) THEN
         call wtime(name='molecular lines:',nlines=nlines)
         DO ns = 1, n_species
@@ -409,7 +412,7 @@ PROGRAM main
         DEALLOCATE(out)
         call wtime(nlines=nlines)
      END IF 
-
+     print *, 'end line'
      ! ----------------
      ! output monochromatic opacities
      ! compute mean opacities
