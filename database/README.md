@@ -4,8 +4,8 @@ This directory houses the opacity databases utilized by Optab.
 
 > ### Notes
 > - Retain the current directory structure, as Optab relies on relative path references.
-> - We suggest beginning with the HITRAN/HITEMP molecular line lists due to the extensive size of the Exomol database.
-
+> - We recommend starting with the HITRAN/HITEMP database for molecular line lists, as the Exomol database's extensive size may be overwhelming for initial exploration.
+> - Please be aware that the scripts provided for downloading the databases may become obsolete if there are changes in the database formats. If you encounter such issues, kindly inform the author.
 ---
 ### `h5/`
 - This directory serves as the repository for HDF5-formatted files created for `optab``.
@@ -13,7 +13,7 @@ This directory houses the opacity databases utilized by Optab.
 ### `1016620_Supplementary_Data/`
 - This directory contains the free-free Gaunt factor data authored by [van Hoof et al. (2014)](https://academic.oup.com/mnras/article/444/1/420/1016620).
 1. Download their [supplementary data](https://academic.oup.com/mnras/article/444/1/420/1016620#supplementary-data) and extract it in this directory.
-   ```
+   ```bash
    unzip ~/Downloads/1016620_Supplementary_Data.zip -d 1016620_Supplementary_Data
    ```
 
@@ -23,32 +23,38 @@ This directory houses the opacity databases utilized by Optab.
 ### `photo/`
 - This directory stores [Verner's photoionization cross sections data](https://www.pa.uky.edu/~verner/photo.html).
 1. Copy all files in https://www.pa.uky.edu/~verner/dima/photo/ into this directory.
-   ```
+   ```bash
    wget -r -np -nH --cut-dirs=3 -P photo -R "index.html*" https://www.pa.uky.edu/~verner/dima/photo/
    ```
 
 ### `TOPbase/`
 - This directory serves as a workspace for [TOPbase: photoionization cross sections](http://cdsweb.u-strasbg.fr/topbase/xsections.html).
-1. Execute `get_topbase.py` to retrieve the cross section data files and convert them to a specific HDF5 format for `Optab`:
-   ```
+   ```bash
    cd TOPbase/
+   ```
+1. Execute `get_topbase.py` to retrieve the cross section data files and convert them to a specific HDF5 format for `Optab`:
+   ```bash
    python3 get_topbase.py
    ```
 
 ### `NIST/`
 - This directory functions as a workspace for the NIST databases on [Atomic Weights and Isotopic Compositions with Relative Atomic Masses](https://www.nist.gov/pml/atomic-weights-and-isotopic-compositions-relative-atomic-masses) and [Atomic Spectra Database Levels](https://physics.nist.gov/PhysRefData/ASD/levels_form.html).
-1. Execute `get_nist_parallel.py` to retrieve the level/atomic data and convert them to a specific HDF5 format for `Optab` (**REQUIREMENT: [`lynx`](https://lynx.invisible-island.net/)**):
    ```bash
    cd NIST/
+   ```
+1. Execute `get_nist_parallel.py` to retrieve the level/atomic data and convert them to a specific HDF5 format for `Optab` (**REQUIREMENT: [`lynx`](https://lynx.invisible-island.net/)**):
+   ```bash
    python3 get_nist_parallel.py
    ```
    or try `get_nist.py` (slower) if you encounter a network issue.
 
 ### `HITRAN/`
 - This directory is a workspace for [HITRAN](https://hitran.org/) molecular linelists.
-1. [HITRAN Isotopologue Metadata](https://hitran.org/docs/iso-meta/) and the partition function files (**REQUIREMENT: [`w3m`](https://w3m.sourceforge.net/)**):
    ```bash
    cd HITRAN/
+   ```
+1. [HITRAN Isotopologue Metadata](https://hitran.org/docs/iso-meta/) and the partition function files (**REQUIREMENT: [`w3m`](https://w3m.sourceforge.net/)**):
+   ```bash
    python3 get_hitran_meta.py
    ```
 1. Linelists (`.par` files):
@@ -67,16 +73,18 @@ This directory houses the opacity databases utilized by Optab.
       bash get_hitemp.sh
       bash get_hitemp_multi.sh
       ```
-1. Create individual .par files for each isotopologue and convert them to HDF5 files ready for optab::
+1. Create individual .par files for each isotopologue and convert them to HDF5 files ready for optab:
    ```bash
    bash preproc_and_convert_HITRAN.sh
    ```
 
 ### `Kurucz/`
 - This directory serves as a workspace for [Kurucz atomic linelinsts](http://kurucz.harvard.edu/linelists.html)
-1. Execute `get_kurucz_linelists.sh` to retrieve two linelists, `gfall08oct17.dat` and `gfpred26apr18.dat`, from Kurucz database and convert them to HDF5 files for `Optab`:
    ```bash
    cd Kurucz/
+   ```
+1. Execute `get_kurucz_linelists.sh` to retrieve two linelists, `gfall08oct17.dat` and `gfpred26apr18.dat`, from Kurucz database and convert them to HDF5 files for `Optab`:
+   ```bash
    bash get_kurucz_linelists.sh
    ```
 2. Execute `get_kurucz_gfgam.sh` to get the level data files `gf????.gam` for all species available (ignore `Not Found` errors) and convert them to an HDF5 file for `Optab`:
