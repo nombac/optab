@@ -1,7 +1,7 @@
 # Running `Optab` example
 
 > ### **CAUTION**
-> The current iteration of optab is not optimized for memory efficiency. For instance, in the sample execution provided, the peak memory consumption can reach approximately 1.5GB or more, varying with the level of parallelization. Therefore, it is advisable to begin with a minimal number of layers and closely observe the memory consumption before proceeding to full-scale calculations. 
+> The current version of `optab` is not optimized for memory efficiency. For instance, in the sample execution provided, the peak memory consumption can reach approximately 1.5GB or more, varying with the level of parallelization. Therefore, it is advisable to begin with a minimal number of layers and closely observe the memory consumption before proceeding to full-scale calculations. 
 
 This section details the creation of opacity tables using a chemical abundance table from [`FastChem`](https://github.com/exoclime/FastChem). Ensure `FastChem` is set up before proceeding. The variables `$FASTCHEM` and `$OPTAB` denote the root directories of FastChem and Optab, respectively.
 
