@@ -12,7 +12,7 @@ This directory houses the opacity databases utilized by Optab.
 
 ### `1016620_Supplementary_Data/`
 - This directory contains the free-free Gaunt factor data authored by [van Hoof et al. (2014)](https://academic.oup.com/mnras/article/444/1/420/1016620).
-- Download their [supplementary data](https://academic.oup.com/mnras/article/444/1/420/1016620#supplementary-data) and extract it in this directory.
+1. Download their [supplementary data](https://academic.oup.com/mnras/article/444/1/420/1016620#supplementary-data) and extract it in this directory.
    ```
    unzip ~/Downloads/1016620_Supplementary_Data.zip -d 1016620_Supplementary_Data
    ```
@@ -22,7 +22,7 @@ This directory houses the opacity databases utilized by Optab.
 
 ### `photo/`
 - This directory stores [Verner's photoionization cross sections data](https://www.pa.uky.edu/~verner/photo.html).
-- Copy all files in https://www.pa.uky.edu/~verner/dima/photo/ into this directory.
+1. Copy all files in https://www.pa.uky.edu/~verner/dima/photo/ into this directory.
    ```
    wget -r -np -nH --cut-dirs=3 -P photo -R "index.html*" https://www.pa.uky.edu/~verner/dima/photo/
    ```
@@ -32,8 +32,6 @@ This directory houses the opacity databases utilized by Optab.
 1. Execute `get_topbase.py` to retrieve the cross section data files and convert them to a specific HDF5 format for `Optab`:
    ```
    cd TOPbase/
-   ```
-   ```
    python3 get_topbase.py
    ```
 
@@ -42,8 +40,6 @@ This directory houses the opacity databases utilized by Optab.
 1. Execute `get_nist_parallel.py` to retrieve the level/atomic data and convert them to a specific HDF5 format for `Optab` (**REQUIREMENT: [`lynx`](https://lynx.invisible-island.net/)**):
    ```bash
    cd NIST/
-   ```
-   ```bash
    python3 get_nist_parallel.py
    ```
    or try `get_nist.py` (slower) if you encounter a network issue.
@@ -52,6 +48,7 @@ This directory houses the opacity databases utilized by Optab.
 - This directory is a workspace for [HITRAN](https://hitran.org/) molecular linelists.
 1. [HITRAN Isotopologue Metadata](https://hitran.org/docs/iso-meta/) and the partition function files (**REQUIREMENT: [`w3m`](https://w3m.sourceforge.net/)**):
    ```bash
+   cd HITRAN/
    python3 get_hitran_meta.py
    ```
 1. Linelists (`.par` files):
