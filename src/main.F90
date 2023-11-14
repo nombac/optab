@@ -104,8 +104,6 @@ PROGRAM main
   READ(5, NML=block_cyclic)
   CLOSE(5)
 
-  print *, 'TEST'
-
   ! SET MOLECULAR LINE SOURCES
   IF(myrk == 0) THEN
      CALL read_mol_source_list(n_species)
@@ -203,7 +201,6 @@ PROGRAM main
      END IF
      
      IF(brems_atomicions == 1) THEN
-        print *, 'brems start'
 #ifndef PHOENIX_BREMS
         call wtime(name='brems(atomic ion):')
         ALLOCATE(out(ks:ke,js:je,NA:NA))
@@ -370,7 +367,6 @@ PROGRAM main
      ! ***************
      ! LINE ABSORPTION
      ! ***************
-     print *, 'start line'
      IF(line_molecules == 1) THEN
         call wtime(name='molecular lines:',nlines=nlines)
         DO ns = 1, n_species
@@ -412,7 +408,6 @@ PROGRAM main
         DEALLOCATE(out)
         call wtime(nlines=nlines)
      END IF 
-     print *, 'end line'
      ! ----------------
      ! output monochromatic opacities
      ! compute mean opacities
