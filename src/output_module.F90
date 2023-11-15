@@ -55,7 +55,7 @@ CONTAINS
   END SUBROUTINE output_table
 
   
-  SUBROUTINE output_mono(j, temp, nden, grd, alp, sca, cnt, temp2, rho, pmean, pmean2)
+  SUBROUTINE output_mono(j, temp, nden, grd, alp, sca, line, temp2, rho, pmean, pmean2)
     USE HDF5
     USE H5LT
     USE const_module, ONLY : c2, h, c, pi
@@ -66,7 +66,7 @@ CONTAINS
     REAL(REAL64), INTENT(IN) :: grd(:)
     REAL(REAL64), INTENT(IN) :: alp(:)
     REAL(REAL64), INTENT(IN) :: sca(:)
-    REAL(REAL64), INTENT(IN) :: cnt(:)
+    REAL(REAL64), INTENT(IN) :: line(:)
     REAL(REAL64), INTENT(IN) :: temp2
     REAL(REAL64), INTENT(IN) :: rho
     REAL(REAL64), INTENT(IN) :: pmean
@@ -107,8 +107,8 @@ CONTAINS
        ELSE
           weight = (grd(k+1) - grd(k-1)) * 0.5d0
        END IF
-       nume = nume + b(k) * DBLE(alp(k)) * weight
-       numec= numec+ b(k) * DBLE(cnt(k) - sca(k)) * weight
+       nume = nume + b(k) * DBLE(alp(k) + line(k)) * weight
+       numec= numec+ b(k) * DBLE(alp(k)) * weight
        deno = deno + b(k)                * weight
     END DO
     pla = REAL(nume / deno)
@@ -119,7 +119,7 @@ CONTAINS
     nume = 0d0
     deno = 0d0
     DO k = ks, ke
-       IF(alp(k) + sca(k) == 0d0) CYCLE
+       IF(alp(k) + line(k) + sca(k) == 0d0) CYCLE
        IF(k == ks) THEN
           weight = (grd(k+1) - grd(k  )) * 0.5d0
        ELSE IF(k == ke) THEN
@@ -128,7 +128,7 @@ CONTAINS
           weight = (grd(k+1) - grd(k-1)) * 0.5d0
        END IF
        nume = nume + dbdt(k)                           * weight
-       deno = deno + dbdt(k) / DBLE((alp(k) + sca(k))) * weight
+       deno = deno + dbdt(k) / DBLE((alp(k) + line(k) +  sca(k))) * weight
     END DO
     ros = REAL(nume / deno)
 
@@ -150,8 +150,8 @@ CONTAINS
        ELSE
           weight = (grd(k+1) - grd(k-1)) * 0.5d0
        END IF
-       nume = nume + DBLE(alp(k)) * b(k) * weight
-       numec= numec+ b(k) * DBLE(cnt(k) - sca(k)) * weight
+       nume = nume + DBLE(alp(k) + line(k)) * b(k) * weight
+       numec= numec+ b(k) * DBLE(alp(k)) * weight
        deno = deno + b(k)                * weight
     END DO
     pla2 = REAL(nume / deno)
@@ -189,7 +189,7 @@ CONTAINS
     CALL h5LTmake_dataset_f(file_id, 'grd', 1, dims1, H5T_IEEE_F64LE, grd, error)
     CALL h5LTmake_dataset_f(file_id, 'abs', 1, dims1, H5T_IEEE_F64LE, alp, error)
     CALL h5LTmake_dataset_f(file_id, 'sca', 1, dims1, H5T_IEEE_F64LE, sca, error)
-    CALL h5LTmake_dataset_f(file_id, 'cnt', 1, dims1, H5T_IEEE_F64LE, cnt, error)
+    CALL h5LTmake_dataset_f(file_id, 'line', 1, dims1, H5T_IEEE_F64LE, line, error)
 
     CALL h5Fclose_f(file_id, error)
     CALL h5close_f(error)

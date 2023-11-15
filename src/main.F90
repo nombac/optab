@@ -36,10 +36,10 @@ PROGRAM main
   REAL(REAL64), ALLOCATABLE :: rho(:)  ! mass density (layer)
   REAL(REAL64), ALLOCATABLE :: grd(:) ! grid (wavenumber)
   REAL(REAL64), ALLOCATABLE :: dgrd(:) ! grid (wavenumber)
-  REAL(REAL64), ALLOCATABLE :: alp(:,:) ! opacity (wavenumber,layer
-  REAL(REAL64), ALLOCATABLE :: sca(:,:) ! scattering opacity (wavenumber,layer
-  REAL(REAL64), ALLOCATABLE :: cnt(:,:) ! total continuum (wavenumber,layer
-  REAL(REAL64), ALLOCATABLE :: out(:,:,:) ! scattering opacity (wavenumber,layer
+  REAL(REAL64), ALLOCATABLE :: alp(:,:) ! continuum opacity (wavenumber,layer)
+  REAL(REAL64), ALLOCATABLE :: line(:,:) ! line opacity (wavenumber,layer)
+  REAL(REAL64), ALLOCATABLE :: sca(:,:) ! scattering opacity (wavenumber,layer)
+  REAL(REAL64), ALLOCATABLE :: out(:,:,:) ! scattering opacity (wavenumber,layer)
   REAL(REAL64), ALLOCATABLE :: pmean(:) ! Planck-mean opacity
   REAL(REAL64), ALLOCATABLE :: pmean2(:) ! two-temp Planck-mean
   REAL(REAL64), ALLOCATABLE :: p_e(:)
@@ -158,13 +158,13 @@ PROGRAM main
      ! BLOCK PARALLEL
      CALL para_range(1, count, iblock, jj, js, je)
 
-     ALLOCATE(sca(ks:ke,js:je), alp(ks:ke,js:je), cnt(ks:ke,js:je), frac_g(js:je,UBOUND(np,1)), &
+     ALLOCATE(sca(ks:ke,js:je), alp(ks:ke,js:je), line(ks:ke,js:je), frac_g(js:je,UBOUND(np,1)), &
           zeta(js:je,UBOUND(np,1)), pmean(js:je), pmean2(js:je))
      ALLOCATE(nlines(js:je,4))
 
      alp(:,:) = 0d0
+     line(:,:) = 0d0
      sca(:,:) = 0d0
-     cnt(:,:) = 0d0
      pmean(:) = 0d0
      pmean2(:) = 0d0
 
@@ -362,8 +362,6 @@ PROGRAM main
         call wtime()
      END IF
 
-     cnt = alp + sca
-        
      ! ***************
      ! LINE ABSORPTION
      ! ***************
@@ -372,8 +370,8 @@ PROGRAM main
         DO ns = 1, n_species
            ALLOCATE(out(ks:ke,js:je,NA:NA))
            CALL line_molec(source(ns), temp1(js:je), np1(:,js:je), grd(:), dgrd(:), out(:,js:je,NA), &
-                cnt(:,js:je), pmean(js:je), temp2, pmean2(js:je), nlines(js:je,:))
-           alp(:,js:je) = alp(:,js:je) + out(:,js:je,NA)
+                alp(:,js:je)+sca(:,js:je), pmean(js:je), temp2, pmean2(js:je), nlines(js:je,:))
+           line(:,js:je) = line(:,js:je) + out(:,js:je,NA)
            DEALLOCATE(out)
         END DO
         call wtime(nlines=nlines)
@@ -383,8 +381,8 @@ PROGRAM main
         call wtime(name='Kurucz phoenix:',nlines=nlines)
         ALLOCATE(out(ks:ke,js:je,NA:NA))
         CALL line_kurucz_p('kurucz_phoenix', temp1(js:je), np1(:,js:je), grd(:), dgrd(:), out(:,js:je,NA), &
-             cnt(:,js:je), pmean(js:je), temp2, pmean2(js:je), nlines(js:je,:))
-        alp(:,js:je) = alp(:,js:je) + out(:,js:je,NA)
+             alp(:,js:je)+sca(:,js:je), pmean(js:je), temp2, pmean2(js:je), nlines(js:je,:))
+        line(:,js:je) = line(:,js:je) + out(:,js:je,NA)
         DEALLOCATE(out)
         call wtime(nlines=nlines)
      END IF
@@ -393,8 +391,8 @@ PROGRAM main
         call wtime(name='Kurucz gfall:',nlines=nlines)
         ALLOCATE(out(ks:ke,js:je,NA:NA))
         CALL line_kurucz('gfall08oct17', temp1(js:je), np1(:,js:je), grd(:), dgrd(:), out(:,js:je,NA), &
-             cnt(:,js:je), pmean(js:je), temp2, pmean2(js:je), nlines(js:je,:))
-        alp(:,js:je) = alp(:,js:je) + out(:,js:je,NA)
+             alp(:,js:je)+sca(:,js:je), pmean(js:je), temp2, pmean2(js:je), nlines(js:je,:))
+        line(:,js:je) = line(:,js:je) + out(:,js:je,NA)
         DEALLOCATE(out)
         call wtime(nlines=nlines)
      END IF
@@ -403,8 +401,8 @@ PROGRAM main
         call wtime(name='Kurucz gfpred:',nlines=nlines)
         ALLOCATE(out(ks:ke,js:je,NA:NA))
         CALL line_kurucz('gfpred26apr18', temp1(js:je), np1(:,js:je), grd(:), dgrd(:), out(:,js:je,NA), &
-             cnt(:,js:je), pmean(js:je), temp2, pmean2(js:je), nlines(js:je,:))
-        alp(:,js:je) = alp(:,js:je) + out(:,js:je,NA)
+             alp(:,js:je)+sca(:,js:je), pmean(js:je), temp2, pmean2(js:je), nlines(js:je,:))
+        line(:,js:je) = line(:,js:je) + out(:,js:je,NA)
         DEALLOCATE(out)
         call wtime(nlines=nlines)
      END IF 
@@ -413,11 +411,11 @@ PROGRAM main
      ! compute mean opacities
      DO j = js, je
         IF(myrk_jconst == 0) THEN
-           CALL output_mono(map(j), temp1(j), np1(:,j), grd(:), alp(:,j), sca(:,j), cnt(:,j), temp2, rho1(j), &
+           CALL output_mono(map(j), temp1(j), np1(:,j), grd(:), alp(:,j), sca(:,j), line(:,j), temp2, rho1(j), &
                 pmean(j), pmean2(j))
         END IF
      END DO
-     DEALLOCATE(alp, sca, cnt, frac_g, zeta, nlines, pmean, pmean2)
+     DEALLOCATE(alp, sca, line, frac_g, zeta, nlines, pmean, pmean2)
      
   END DO layer
 
