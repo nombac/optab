@@ -27,7 +27,7 @@ def generate_plot(dir_path, layer):
     grd = data['grd']
     abs_ = data['abs']
     sca = data['sca']
-    cnt = data['cnt']
+    line = data['line']
     np_ = data['nden']
     pre = np_[0] * K_BOL * tmp
 
@@ -39,8 +39,8 @@ def generate_plot(dir_path, layer):
 
     plt.rcParams.update({'font.size': 16})  # Adjust the number to your preference
     plt.figure(figsize=(10, 8))
-    plt.loglog(grd, abs_, color='red', label='abs (cnt. + line)')
-    plt.loglog(grd, cnt - sca, color='gray', label='abs (cnt.)')
+    plt.loglog(grd, line, color='red', label='abs (line)')
+    plt.loglog(grd, abs_, color='gray', label='abs (cnt.)')
     plt.loglog(grd, sca, color='blue', label='sca')
     plt.loglog(grd0, planck, color='green', linestyle=':', label='Planck')
     plt.xlabel(r'$\nu$ [cm$^{-1}$]')
