@@ -3,7 +3,8 @@
 
 #define ATOMIC_IONS
 #define FASTCHEM_ORIGINAL
-#define OPTAB_DATABASE_DIR '/Volumes/Storage/database/'    
+#define OPTAB_DATABASE_DIR "/S/data00/G5106/y0582/database/"
+#define FASTCHEM_INPUT_DIR "/S/home01/G5106/y0582/FastChem/input/"
 
 PROGRAM prep_FastChem
 
@@ -47,7 +48,7 @@ PROGRAM prep_FastChem
        'Eu', 'Ho', 'Tb', 'Re', 'Tm', 'Lu', 'Th', 'Ta', 'U ']
 
 
-  OPEN(1,FILE='prep_FastChem.dat',STATUS='OLD')
+  OPEN(1,FILE='prep_FastChem.dat',STATUS='OLD', RECL=max_line_len)
   READ(1,*) id
   READ(1,*) tmp_min, tmp_max, lmax
   READ(1,*) pmin, pmax, jmax
@@ -65,7 +66,8 @@ PROGRAM prep_FastChem
 !  tmp_min = 2.5d0
 !  tmp_max = 6d0
   
-  CALL SYSTEM('mkdir lnK_'//id)
+  CALL SYSTEM('mkdir '//FASTCHEM_INPUT_DIR//'lnK_'//id)
+  CALL SYSTEM('mkdir '//FASTCHEM_INPUT_DIR//'../output')
 
   fname_config = 'config.input_'//TRIM(id)
   fname_tpgrid = 'tpgrid_'//TRIM(id)//'.dat'
@@ -76,7 +78,7 @@ PROGRAM prep_FastChem
 
   PRINT *, 'configuration file:', TRIM(fname_config)
   ! CONFIGURATION FILE
-  OPEN(1,FILE=TRIM(fname_config))
+  OPEN(1, FILE=FASTCHEM_INPUT_DIR//TRIM(fname_config), RECL=max_line_len)
   WRITE(1,*) '#Atmospheric profile input file'
   WRITE(1,*) 'input/'//TRIM(fname_tpgrid)
   WRITE(1,*) ''
@@ -112,7 +114,7 @@ PROGRAM prep_FastChem
   PRINT *, 'profile input file:', TRIM(fname_tpgrid)
   ALLOCATE(tmp(lmax), q_i(lmax), q_n(lmax), lnk_save(lmax))
 
-  OPEN(1,FILE=TRIM(fname_tpgrid), STATUS='REPLACE')
+  OPEN(1,FILE=FASTCHEM_INPUT_DIR//TRIM(fname_tpgrid), STATUS='REPLACE', RECL=max_line_len)
   WRITE(1,'(A)') '# T[K]-P[bar] grid'
   WRITE(1,'(A,F6.2,A,F6.2,A,I3,A)') '# logT = [',REAL(tmp_min),',',REAL(tmp_max),',',lmax,']'
   WRITE(1,'(A,F6.2,A,F6.2,A,I3,A)') '# logP = [',REAL(pmin),',',REAL(pmax),',',jmax,']'
@@ -133,7 +135,7 @@ PROGRAM prep_FastChem
   
 
   ! read electron_affinity data
-  OPEN(1,FILE='electron_affinity.tsv',STATUS='OLD')
+  OPEN(1,FILE='electron_affinity.tsv',STATUS='OLD', RECL=max_line_len)
   READ(1,*)
   READ(1,*)
   DO na = 1, 92
@@ -146,7 +148,7 @@ PROGRAM prep_FastChem
   PRINT *, 'species data file:', TRIM(fname_species)
   PRINT *, 'lnK directory:', TRIM(dname_lnK)
 
-  OPEN(2,FILE=TRIM(fname_species))
+  OPEN(2,FILE=FASTCHEM_INPUT_DIR//TRIM(fname_species), RECL=max_line_len)
   WRITE(2,*) '#'
   WRITE(2,*) '#'
   WRITE(2,*) '#'
@@ -154,7 +156,7 @@ PROGRAM prep_FastChem
   
 #ifdef FASTCHEM_ORIGINAL
   PRINT *, 'molecule lnK'
-  OPEN(1, FILE='logK_ext.dat', STATUS='OLD', RECL=max_line_len)
+  OPEN(1, FILE=FASTCHEM_INPUT_DIR//'logK_ext.dat', STATUS='OLD', RECL=max_line_len)
   READ(1,*)!HEADER
   READ(1,*)!HEADER
   READ(1,*)!HEADER
@@ -174,7 +176,7 @@ PROGRAM prep_FastChem
      WRITE(2,*) 'f input/'//TRIM(fname)
      WRITE(2,*) ' '
      
-     OPEN(3, FILE=TRIM(fname))
+     OPEN(3, FILE=FASTCHEM_INPUT_DIR//TRIM(fname), RECL=max_line_len)
      WRITE(3,*) DBLE(tmp_min), DBLE(dtmp), ' log'
      DO l = 1, lmax
         lnK = a1/tmp(l) + a2*LOG(tmp(l)) + a3 + a4*tmp(l) + a5*tmp(l)**2
@@ -237,8 +239,8 @@ PROGRAM prep_FastChem
         WRITE(2,*) TRIM(celem(na))//'1'//csign//TRIM(cnib)//' '//TRIM(celem(na))//'_Ion : '//celem(na)//' 1 e- '//cnia//' #'
         WRITE(2,*) 'f input/'//fname
         WRITE(2,*) ' '
-        OPEN(1, FILE=fname)
-        OPEN(3, FILE=fname_pf)
+        OPEN(1, FILE=FASTCHEM_INPUT_DIR//fname, RECL=max_line_len)
+        OPEN(3, FILE=FASTCHEM_INPUT_DIR//fname_pf, RECL=max_line_len)
         WRITE(1,*) DBLE(tmp_min), DBLE(dtmp), ' log'
         DO l = 1, lmax
            kt = k_bol * tmp(l)
@@ -259,7 +261,7 @@ PROGRAM prep_FastChem
 #endif
   CLOSE(2)
   PRINT *, ''
-  PRINT *, 'Go to parent directory and run FastChem:'
+  PRINT *, 'Go to FastChem directory and run FastChem:'
   PRINT *, './fastchem input/'//TRIM(fname_config)
 
   STOP
