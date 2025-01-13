@@ -415,7 +415,7 @@ CONTAINS
     REAL(REAL32) :: lambda, loggf, code0, lowj, gamr, gam4, gam6, highj, lg_HF_frc, lg_frc, frc_nist
     REAL(REAL64) :: highe0, lowe0
 
-    INTEGER(INT32), PARAMETER :: na_uran = 92, mn_uran = 238
+    INTEGER(INT32), PARAMETER :: na_uran = 92, mn_uran = 243
     CHARACTER :: natm*3, nion*2, output*72, command*72
     REAL(REAL64), ALLOCATABLE :: comp_iso(:,:), mass(:), eneion(:)
     CHARACTER :: prefix*256

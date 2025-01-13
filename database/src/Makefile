@@ -3,7 +3,7 @@ SHELL = /bin/sh
 
 OPENMPI = /opt/local
 HDF5 = /opt/local
-FFLAGS  = -Wall #-fbounds-check
+FFLAGS  = -Wall -fbounds-check
 
 FC = $(OPENMPI)/bin/mpif90
 FFLAGS  += -O3 -I$(HDF5)/include
