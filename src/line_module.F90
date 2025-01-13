@@ -1283,7 +1283,7 @@ CONTAINS
     CALL h5Gopen_f(file_spec, 'ATOMIC_LINES', grp_trans, error)
     dims = [1]
     CALL h5LTread_dataset_f(grp_trans, 'nlines', H5T_STD_I64LE, nlines, dims, error)
-    if(myrk == 0) print *, 'nlines = ', nlines
+    !if(myrk == 0) print *, 'nlines = ', nlines
 
     CALL h5LTread_dataset_f(grp_trans, 'chunky', H5T_STD_I32LE, chunk0, dims, error)
     CALL h5Dopen_f(grp_trans, 'wl', data_wnum, error)
