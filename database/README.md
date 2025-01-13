@@ -8,7 +8,7 @@ This directory houses the opacity databases utilized by Optab.
 > - Please be aware that the scripts provided for downloading the databases may become obsolete if there are changes in the database formats. If you encounter such issues, kindly inform the author (shirose@jamstec.go.jp).
 ---
 ### `h5/`
-- This directory serves as the repository for HDF5-formatted files created for `optab``.
+- This directory serves as the repository for HDF5-formatted files created for `optab`.
 
 ### `1016620_Supplementary_Data/`
 - This directory contains the free-free Gaunt factor data authored by [van Hoof et al. (2014)](https://academic.oup.com/mnras/article/444/1/420/1016620).
@@ -58,7 +58,7 @@ This directory houses the opacity databases utilized by Optab.
    python3 get_hitran_meta.py
    ```
 1. Linelists (`.par` files):
-   1. [`LBL`](https://hitran.org/lbl/) (**REQUIREMENT: Goggle Chrome**):
+   1. [`LBL`](https://hitran.org/lbl/) (**REQUIREMENT: Google Chrome, selenium (Python package), webdriver_manager (Python package)**):
       
       ```bash
       python3 get_hitran_lines.py "/Users/shirose/Library/Application\ Support/Google/Chrome/Default"
@@ -69,10 +69,7 @@ This directory houses the opacity databases utilized by Optab.
       >- If you are redirected to the registration page, register or log in. Then, exit Chrome and restart the process.
       >- Alternatively, you can download the linelists manually; refer to the instructions provided within the code.
    1. [`HITEMP`](https://hitran.org/hitemp/)
-      ```bash
-      bash get_hitemp.sh
-      bash get_hitemp_multi.sh
-      ```
+      [Under Construction]
 1. Create individual .par files for each isotopologue and convert them to HDF5 files ready for optab:
    ```bash
    bash preproc_and_convert_HITRAN.sh
@@ -85,7 +82,7 @@ This directory houses the opacity databases utilized by Optab.
    ```
 1. Execute `get_kurucz_linelists.sh` to retrieve two linelists, `gfall08oct17.dat` and `gfpred26apr18.dat`, from Kurucz database and convert them to HDF5 files for `Optab`:
    ```bash
-   bash get_kurucz_linelists.sh
+   bash get_kurucz_lines.sh
    ```
 2. Execute `get_kurucz_gfgam.sh` to get the level data files `gf????.gam` for all species available (ignore `Not Found` errors) and convert them to an HDF5 file for `Optab`:
    ```bash
