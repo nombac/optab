@@ -1,0 +1,30 @@
+# Downloaded data
+1016620_Supplementary_Data/
+HITRAN/Q/
+HITRAN/original/
+HITRAN/decomp/
+Kurucz/atoms/
+Kurucz/linelists/
+NIST/levels/
+TOPbase/elevel.*.dat
+TOPbase/xsectn.*.dat
+photo/
+
+# Generated data
+h5/
+HITRAN/hitran_meta.txt
+HITRAN/list_convert.txt
+HITRAN/fort.100
+Kurucz/list_convert.txt
+NIST/nist_isotope.txt
+
+# Compiled binaries
+src/convert_cia_h5
+src/convert_gfgam_h5
+src/convert_lines_h5
+src/convert_nist_h5
+src/convert_topbase_h5
+src/preproc_hitran
+
+# Backup files
+*.bak
