@@ -24,6 +24,7 @@ This directory houses the opacity databases utilized by Optab.
 - This directory stores [Verner's photoionization cross sections data](https://www.pa.uky.edu/~verner/photo.html).
 1. Copy `photo.dat` and `table1.dat` from the site.
    ```bash
+   cd photo/
    bash get_photo.sh
    ```
 
