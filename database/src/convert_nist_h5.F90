@@ -26,7 +26,7 @@ PROGRAM convert_nist_h5
   INTEGER(INT32) :: error
   INTEGER(INT32) :: ni, na, indx
   CHARACTER :: natm*3, nion*2, filename*72, command*72
-  INTEGER(INT32), PARAMETER :: na_uran = 92, mn_uran = 238
+  INTEGER(INT32), PARAMETER :: na_uran = 92, mn_uran = 243
   REAL(REAL64),ALLOCATABLE :: comp_iso(:,:), mass(:), eneion(:)
   
   ALLOCATE(comp_iso(na_uran,mn_uran), mass(na_uran), eneion((na_uran + 1) * 100))

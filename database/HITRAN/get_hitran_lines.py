@@ -61,16 +61,19 @@ urls_and_files = [
     ('https://hitran.org/lbl/5?output_format_id=1&iso_ids_list=78%2C106&vib_bands=&numin=0&numax=', '27_HITRAN.par'),
     ('https://hitran.org/lbl/5?output_format_id=1&iso_ids_list=79&vib_bands=&numin=0&numax=', '28_HITRAN.par'),
     ('https://hitran.org/lbl/5?output_format_id=1&iso_ids_list=80%2C119&vib_bands=&numin=0&numax=', '29_HITRAN.par'),
+    ('https://hitran.org/lbl/5?output_format_id=1&iso_ids_list=126&vib_bands=&numin=0&numax=', '30_HITRAN.par'),
     ('https://hitran.org/lbl/5?output_format_id=1&iso_ids_list=81%2C82%2C83&vib_bands=&numin=0&numax=', '31_HITRAN.par'),
     ('https://hitran.org/lbl/5?output_format_id=1&iso_ids_list=84&vib_bands=&numin=0&numax=', '32_HITRAN.par'),
     ('https://hitran.org/lbl/5?output_format_id=1&iso_ids_list=85&vib_bands=&numin=0&numax=', '33_HITRAN.par'),
     ('https://hitran.org/lbl/5?output_format_id=1&iso_ids_list=86&vib_bands=&numin=0&numax=', '34_HITRAN.par'),
+    ('https://hitran.org/lbl/5?output_format_id=1&iso_ids_list=127%2C128&vib_bands=&numin=0&numax=', '35_HITRAN.par'),
     ('https://hitran.org/lbl/5?output_format_id=1&iso_ids_list=87&vib_bands=&numin=0&numax=', '36_HITRAN.par'),
     ('https://hitran.org/lbl/5?output_format_id=1&iso_ids_list=88%2C89&vib_bands=&numin=0&numax=', '37_HITRAN.par'),
     ('https://hitran.org/lbl/5?output_format_id=1&iso_ids_list=90%2C91&vib_bands=&numin=0&numax=', '38_HITRAN.par'),
     ('https://hitran.org/lbl/5?output_format_id=1&iso_ids_list=92&vib_bands=&numin=0&numax=', '39_HITRAN.par'),
     ('https://hitran.org/lbl/5?output_format_id=1&iso_ids_list=93%2C94&vib_bands=&numin=0&numax=', '40_HITRAN.par'),
     ('https://hitran.org/lbl/5?output_format_id=1&iso_ids_list=95&vib_bands=&numin=0&numax=', '41_HITRAN.par'),
+    ('https://hitran.org/lbl/5?output_format_id=1&iso_ids_list=96&vib_bands=&numin=0&numax=', '42_HITRAN.par'),
     ('https://hitran.org/lbl/5?output_format_id=1&iso_ids_list=116&vib_bands=&numin=0&numax=', '43_HITRAN.par'),
     ('https://hitran.org/lbl/5?output_format_id=1&iso_ids_list=109&vib_bands=&numin=0&numax=', '44_HITRAN.par'),
     ('https://hitran.org/lbl/5?output_format_id=1&iso_ids_list=103%2C115&vib_bands=&numin=0&numax=', '45_HITRAN.par'),
@@ -82,8 +85,8 @@ urls_and_files = [
     ('https://hitran.org/lbl/5?output_format_id=1&iso_ids_list=144&vib_bands=&numin=0&numax=', '51_HITRAN.par'),
     ('https://hitran.org/lbl/5?output_format_id=1&iso_ids_list=139%2C140%2C141%2C142%2C143&vib_bands=&numin=0&numax=', '52_HITRAN.par'),
     ('https://hitran.org/lbl/5?output_format_id=1&iso_ids_list=131%2C132%2C133%2C134&vib_bands=&numin=0&numax=', '53_HITRAN.par'),
-    ('https://hitran.org/lbl/5?output_format_id=1&iso_ids_list=145&vib_bands=&numin=0&numax=', '54_HITRAN.par')
-    # Add more tuples here for each URL and target file name
+    ('https://hitran.org/lbl/5?output_format_id=1&iso_ids_list=145&vib_bands=&numin=0&numax=', '54_HITRAN.par'),
+    ('https://hitran.org/lbl/5?output_format_id=1&iso_ids_list=136&vib_bands=&numin=0&numax=', '55_HITRAN.par')
 ]
 
 # Set up Chrome options
@@ -95,6 +98,10 @@ os.makedirs('original', exist_ok=True)
 
 # Iterate over the URL and filename pairs
 for URL, parfile in urls_and_files:
+    filepath = os.path.join('original', parfile)
+    if os.path.exists(filepath):
+        print(f'Skipping {filepath} (already exists).')
+        continue
     # Set up the WebDriver with a new Service object each time
     service = Service(ChromeDriverManager().install())
     driver = webdriver.Chrome(service=service, options=chrome_options)
@@ -125,5 +132,3 @@ for URL, parfile in urls_and_files:
     finally:
         driver.quit()
 
-import subprocess        
-subprocess.run(['bash', 'get_hitran_LBL.sh'])

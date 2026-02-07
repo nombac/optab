@@ -43,7 +43,7 @@ This directory houses the opacity databases utilized by Optab.
    ```bash
    cd NIST/
    ```
-1. Execute `get_nist_parallel.py` to retrieve the level/atomic data and convert them to a specific HDF5 format for `Optab` (**REQUIREMENT: [`lynx`](https://lynx.invisible-island.net/)**):
+1. Execute `get_nist_parallel.py` to retrieve the level/atomic data and convert them to a specific HDF5 format for `Optab`:
    ```bash
    python3 get_nist_parallel.py
    ```

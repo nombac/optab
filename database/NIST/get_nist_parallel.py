@@ -11,6 +11,10 @@ def process_aaa(aaa, output_directory, pbar):
         output_states_path = os.path.join(output_directory, f"nist_{aaa:03d}.{bb:02d}.states")
         output_ionize_path = os.path.join(output_directory, f"nist_{aaa:03d}.{bb:02d}.ionize")
 
+        if os.path.exists(output_states_path) and os.path.exists(output_ionize_path):
+            pbar.update(1)
+            continue
+
         url = f"https://physics.nist.gov/cgi-bin/ASD/energy1.pl?de=0&spectrum=Z%3D{aaa}+{bb}&submit=Retrieve+Data&units=0&format=2&output=0&page_size=15&average_out=1&multiplet_ordered=1&conf_out=on&term_out=on&level_out=on&g_out=on&temp="
         response = requests.get(url)
 
@@ -71,9 +75,26 @@ def main():
     # Print completion message
     print("The process has been completed.")
 
+    # Fetch isotope data from NIST (replaces get_nist_atomic.sh / lynx)
+    print("Fetching isotope data from NIST...")
+    url = "https://physics.nist.gov/cgi-bin/Compositions/stand_alone.pl?ele=&all=all&ascii=ascii2&isotype=all"
+    response = requests.get(url)
+    if response.status_code == 200:
+        text = response.text
+        # Extract data records (between first and last "Atomic Number" blocks)
+        start = text.find("Atomic Number")
+        end = text.find("\n\n", text.rfind("Notes"))
+        text = text[start:end]
+        text = text.replace("&nbsp;", " ")
+        text = text.replace("Atomic Symbol = D", "Atomic Symbol = H")
+        text = text.replace("Atomic Symbol = T", "Atomic Symbol = H")
+        with open("nist_isotope.txt", "w") as f:
+            f.write(text + "\n")
+    else:
+        print(f"Error fetching isotope data: Status code {response.status_code}")
+
     # Convert fetched files to an HDF5 file for Optab
     import subprocess
-    subprocess.call(["bash", "get_nist_atomic.sh"])
     subprocess.call(["../src/convert_nist_h5"])
 
 if __name__ == "__main__":

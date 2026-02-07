@@ -32,6 +32,8 @@ def print_error(response_text):
 # Function to download and process files
 def download_and_process(nz, ne, entity, prefix):
     filename = create_filename(prefix, nz, ne)
+    if os.path.exists(filename):
+        return
     base_url = f"http://cdsweb.u-strasbg.fr/cgi-bin/topbase/topbase.sh"
     params = {
         'com': 'dt',
