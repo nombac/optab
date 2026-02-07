@@ -69,11 +69,20 @@ This directory houses the opacity databases utilized by Optab.
       >NOTE:
       >- If you are redirected to the registration page, register or log in. Then, exit Chrome and restart the process.
       >- Alternatively, you can download the linelists manually; refer to the instructions provided within the code.
-   1. [`HITEMP`](https://hitran.org/hitemp/)
-      [Under Construction]
+   1. [`HITEMP`](https://hitran.org/hitemp/) (**REQUIREMENT: Google Chrome, selenium (Python package), webdriver_manager (Python package)**):
+
+      ```bash
+      python3 get_hitemp_lines.py "/Users/shirose/Library/Application\ Support/Google/Chrome/Default"
+      ```
+      The required argument is your Chrome user profile directory. To find this, visit chrome://version in Chrome.
+      Available molecules: H2O, CO2, N2O, CO, CH4, NO, NO2, OH.
+
+      >NOTE:
+      >- If you are redirected to the registration page, register or log in. Then, exit Chrome and restart the process.
 1. Create individual .par files for each isotopologue and convert them to HDF5 files ready for optab:
    ```bash
    bash preproc_and_convert_HITRAN.sh
+   bash preproc_and_convert_HITEMP.sh
    ```
 
 ### `Kurucz/`
