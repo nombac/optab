@@ -226,7 +226,7 @@ CONTAINS
     CLOSE(5)
     IF(ios == 0) THEN
        DO i = 1, imax
-          IF(i /= codes) np(codes,1:jmax) = 0d0
+          IF(i /= codes) np(i,1:jmax) = 0d0
        END DO
        PRINT *, '*** CAUTION: ONLY A SINGLE SPECIES IS SELECTED'
     END IF
