@@ -7,7 +7,7 @@ This section details the creation of opacity tables using a chemical abundance t
 
 1. **Generate a Chemical Abundance Table with `FastChem`**\
  Follow the instructions in [`work/FastChem-lnk_interpolate_dev/README.md`](../work/FastChem-lnk_interpolate_dev/README.md). By default, the grid is 21 x 21 and evenly spaced in the log T - log P plane (see the image below). (If you plan to use an existing chemical-equilibrium dataset, see [eos/README.md](../eos/README.md).)\
- **Warning:** `FastChem` built with quadruple precision does not run correctly on arm64 Macs due to ABI constraints. arm64 Mac users must run `FastChem` on a separate x86_64 platform.
+ **Warning:** `FastChem` built with quadruple precision does not run correctly on arm64 Macs due to ABI constraints. arm64 Mac users must run `FastChem` on a separate x86_64 platform; see Step 2 for a fallback.
 
 2. **Convert `FastChem` Output to an `optab`-compatible HDF5 File**
    ```bash
