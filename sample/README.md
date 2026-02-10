@@ -6,12 +6,17 @@
 This section details the creation of opacity tables using a chemical abundance table from [`FastChem`](https://github.com/exoclime/FastChem). Ensure `FastChem` is set up before proceeding. The variables `$FASTCHEM` and `$OPTAB` denote the root directories of FastChem and Optab, respectively.
 
 1. **Generate a Chemical Abundance Table with `FastChem`**\
- Follow the instructions described in  [`work/FastChem-lnk_interpolate_dev/README.md`](../work/FastChem-lnk_interpolate_dev/README.md). In the default setting, the grid points are 21 x 21, equally distributed in the log T - log P plane; see the image below. (If you intend to use an existing dataset of chemical equilibrium abundances, see [eos/README.md](../eos/README.md).)
+ Follow the instructions in [`work/FastChem-lnk_interpolate_dev/README.md`](../work/FastChem-lnk_interpolate_dev/README.md). By default, the grid is 21 x 21 and evenly spaced in the log T - log P plane (see the image below). (If you plan to use an existing chemical-equilibrium dataset, see [eos/README.md](../eos/README.md).)\
+ **Warning:** `FastChem` built with quadruple precision does not run correctly on arm64 Macs due to ABI constraints. arm64 Mac users must run `FastChem` on a separate x86_64 platform.
 
 2. **Convert `FastChem` Output to an `optab`-compatible HDF5 File**
    ```bash
    cd $OPTAB/eos/FastChem
    ../src/convert_Fastchem $FASTCHEM/output/table.dat
+   ```
+   If you do not have access to an x86_64 platform but still want to test `optab`, a sample `FastChem` output is available at `../work/FastChem-lnk_interpolate_dev/output/test.dat`. In that case, run:
+   ```bash
+   ../src/convert_Fastchem ../work/FastChem-lnk_interpolate_dev/output/test.dat
    ```
    > Visualize the converted HDF5 file table.h5 using the following Python script:
    >  ```bash
