@@ -14,9 +14,9 @@ This section details the creation of opacity tables using a chemical abundance t
    cd $OPTAB/eos/FastChem
    ../src/convert_Fastchem $FASTCHEM/output/table.dat
    ```
-   If you do not have access to an x86_64 platform but still want to test `optab`, a sample `FastChem` output is available at `../work/FastChem-lnk_interpolate_dev/output/test.dat`. In that case, run:
+   If you do not have access to an x86_64 platform but still want to test `optab`, a sample `FastChem` output is available at `$OPTAB/work/FastChem-lnk_interpolate_dev/output/table.dat`. In that case, run:
    ```bash
-   ../src/convert_Fastchem ../work/FastChem-lnk_interpolate_dev/output/test.dat
+   ../src/convert_Fastchem $OPTAB/work/FastChem-lnk_interpolate_dev/output/table.dat
    ```
    > Visualize the converted HDF5 file table.h5 using the following Python script:
    >  ```bash
