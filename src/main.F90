@@ -104,6 +104,14 @@ PROGRAM main
   READ(5, NML=block_cyclic)
   CLOSE(5)
 
+  ! Validate switches
+  IF(photoion_mathisen == 1 .AND. photoion_topbase == 1) THEN
+     IF(myrk == 0) THEN
+        PRINT *, 'ERROR: photoion_mathisen and photoion_topbase are mutually exclusive.'
+     END IF
+     CALL MPI_ABORT(MPI_COMM_WORLD, 1, error)
+  END IF
+
   ! SET MOLECULAR LINE SOURCES
   IF(myrk == 0) THEN
      CALL read_mol_source_list(n_species)
@@ -206,8 +214,8 @@ PROGRAM main
         ALLOCATE(out(ks:ke,js:je,NA:NA))
         fac_0 = SQRT(8d0 * alpha**6 * hbar**4 / (27d0 * pi * clight**2 * k_bol**3 * m_ele**3))
         DO z = 1, (ZnI/100)
-           CALL brems_atom_vanHoof_2014(temp1(js:je), grd(:), out(:,js:je,NA), z - ne)
            DO ne = 0, z - 1
+              CALL brems_atom_vanHoof_2014(temp1(js:je), grd(:), out(:,js:je,NA), z - ne)
               code = z * 100 + (z - ne)
               DO j = js, je
                  alp(:,j) = alp(:,j) + p_e1(j) * np1(code,j) * (z - ne)**2 / temp1(j)**1.5d0 * fac_0 * &

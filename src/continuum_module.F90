@@ -532,10 +532,7 @@ CONTAINS
           CALL h5LTread_dataset_f(grp_spec, 'gtot', H5T_STD_I32LE, gtot, dims, error)
           DO n = n_min, nlevel
              CALL h5Gopen_f(grp_spec, c04(n), grp_lvl, error)
-             IF(error /= 0) THEN
-                PRINT *, error, c04(n)
-                STOP
-             END IF
+             IF(error /= 0) CYCLE
              dims = [1]
              CALL h5LTread_dataset_f(grp_lvl, 'np', H5T_STD_I32LE, npo_max, dims, error)
              IF(npo_max == 0) THEN
@@ -2208,15 +2205,15 @@ CONTAINS
           DO n = 2, n_max-1
              nr = DBLE(n)
              !(11)
-             f = 128d0 / (3d0 * EXP(4d0)) * 2d0 / n**3 * &
-                  (1d0 + 8d0/(3d0*n**2) + 214d0/(45d0*n**4) + &
-                  20192d0/(2835d0*n**6) + 411683d0/(42525*n**8) + &
-                  17369584d0/(1403325d0*n**10))
+             f = 128d0 / (3d0 * EXP(4d0)) * 2d0 / nr**3 * &
+                  (1d0 + 8d0/(3d0*nr**2) + 214d0/(45d0*nr**4) + &
+                  20192d0/(2835d0*nr**6) + 411683d0/(42525d0*nr**8) + &
+                  17369584d0/(1403325d0*nr**10))
              !(21)
              f12 = f * (1d0/3d0)
              f32 = f * (2d0/3d0)
              !(24)
-             del = alpha**3 / n**5 * (-0.187d0 + 2.915d0 * LOG(nr))
+             del = alpha**3 / nr**5 * (-0.187d0 + 2.915d0 * LOG(nr))
              IF(e1n12(n) .LE. eps(k) .AND. eps(k) .LE. e1n32(n)) THEN
 #undef FINE_STRUCTURE_NEGLECTED
 #ifdef FINE_STRUCTURE_NEGLECTED
