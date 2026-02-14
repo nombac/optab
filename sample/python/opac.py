@@ -14,8 +14,13 @@ def read_mono_hdf5(file_path):
     except Exception as e:
         raise RuntimeError(f"Failed to read {file_path}: {e}")
 
-def opac(dir_path, mean, syms):
+def layer_from_filename(file_path):
+    name = os.path.basename(file_path)
+    return int(name[5:10])
+
+def opac(dir_path, mean, syms, dump=False):
     files = [os.path.join(dir_path, 'output', f) for f in os.listdir(os.path.join(dir_path, 'output')) if f.startswith("mono_") and f.endswith(".h5")]
+    files = sorted(files, key=layer_from_filename)
     nmax = len(files)
     
     if nmax == 0:
@@ -24,6 +29,7 @@ def opac(dir_path, mean, syms):
     print(f"Reading {nmax} layers ... ")
 
     datasets = [read_mono_hdf5(file) for file in files]
+    layers = np.array([layer_from_filename(file) for file in files], dtype=int)
     tmp2 = np.array([data['temp2'] for data in datasets])
     tmp_tot = np.array([data['temp'] for data in datasets])
     rho_tot = np.array([data['rho'] for data in datasets])
@@ -37,23 +43,30 @@ def opac(dir_path, mean, syms):
 
     # Title and label mapping
     titles = {
-        'ross': ('Rosseland-mean opacity', 'log $\kappa$ [cm$^2$/g]'),
-        'pla': ('Planck-mean opacity', 'log $\kappa$ [cm$^2$/g]'),
-        'pla2': (f'Planck-mean opacity at T_rad={int(tmp2[0])}K', 'log $\kappa$ [cm$^2$/g]')
+        'ross': ('Rosseland-mean opacity', r'log $\kappa$ [cm$^2$/g]'),
+        'pla': ('Planck-mean opacity', r'log $\kappa$ [cm$^2$/g]'),
+        'pla2': (f'Planck-mean opacity at T_rad={int(tmp2[0])}K', r'log $\kappa$ [cm$^2$/g]')
     }
 
     if mean not in titles:
         raise ValueError(f"Unknown mean type: {mean}")
     title, btitle = titles[mean]
+    mean_tot = (
+        ros_tot if mean == 'ross' else
+        pla_tot if mean == 'pla' else
+        pla2_tot
+    )
+
+    if dump:
+        print("# layer temp[K] rho[g/cm^3] log_mean_opacity[cm^2/g]")
+        for layer, temp, rho, mean_opac in zip(layers, tmp_tot, rho_tot, mean_tot):
+            print(f"{layer:d} {temp:.8e} {rho:.8e} {mean_opac:.8e}")
 
     # Plotting
     plt.rcParams.update({'font.size': 16})  # Adjust the number to your preference
     
     plt.figure(figsize=(10, 8))
-    scatter = plt.scatter(tmp_tot, rho_tot, c=
-                          ros_tot if mean == 'ross' else
-                          pla_tot if mean == 'pla' else
-                          pla2_tot,
+    scatter = plt.scatter(tmp_tot, rho_tot, c=mean_tot,
                           s=syms, cmap='jet', norm=plt.Normalize(vmin=vmin, vmax=vmax), marker='s')
     plt.yscale('log')
     plt.xscale('log')
@@ -78,11 +91,12 @@ def main():
     parser.add_argument('dir_path', type=str, help='The path to the directory containing HDF5 files')
     parser.add_argument('mean', type=str, choices=['ross', 'pla', 'pla2'], help='Type of mean opacity to plot')
     parser.add_argument('syms', type=int, help='Marker size for scatter plot')
+    parser.add_argument('--dump', action='store_true', help='Dump layer, temperature, density, and mean opacity')
 
     # Execute the parse_args() method
     args = parser.parse_args()
 
-    opac(args.dir_path, args.mean, args.syms)
+    opac(args.dir_path, args.mean, args.syms, dump=args.dump)
 
 if __name__ == '__main__':
     main()
