@@ -9,12 +9,13 @@ PROGRAM preprop_hitran
   CHARACTER*256, ALLOCATABLE, DIMENSION(:) :: filename
   INTEGER(INT32) :: code, code0, code00, count, ntemp, nt, co
   INTEGER(INT32) :: global, local, afgl, gi, cnt, temp
+  INTEGER(INT32), ALLOCATABLE :: local_list(:)
   REAL(REAL64) :: frac1, mass1, q, q1
   CHARACTER*256 :: pf1, form1, dec_prop, dec_par
   REAL(REAL64) :: wnum, int, acoeff, aw, sw, lowe, td, ps, gu, gl, gfva
-  INTEGER(INT64) :: ref, nlines, nlines_decomp
+  INTEGER(INT64) :: ref, nlines, nlines_decomp, nlines_est, filesize
   INTEGER(INT32) :: mol, iso, err
-  CHARACTER :: uq*15, lq*15, flg*1, ulq*15, llq*15, colon*1
+  CHARACTER :: uq*15, lq*15, flg*1, ulq*15, llq*15, colon*1, iso_char*1
   INTEGER(INT32), PARAMETER :: max_buf = 256
   CHARACTER(max_buf):: linebuf
 
@@ -103,10 +104,12 @@ PROGRAM preprop_hitran
   READ(12,*)
   READ(12,*)
 
+  ALLOCATE(local_list(count))
   DO cnt = 1, count
      READ(12,*) global, local, form1, afgl, frac1, mass1, q1, pf1, gi
      !     IF(code0 == 10 .AND. global == 130) CYCLE ! for NO2, q130.txt not exist
      IF(local == 0) local = 10
+     local_list(cnt) = local
      PRINT '(A10,I4,A2,A)', 'local ID: ', local, ': ', TRIM(form1)
      dec_prop = TRIM(form1)//'__'//filename(1)(INDEX(filename(1),'_',.TRUE.)+1:INDEX(filename(1),'.',.TRUE.)-1)//'.prop'
      dec_par  = TRIM(form1)//'__'//filename(1)(INDEX(filename(1),'_',.TRUE.)+1:INDEX(filename(1),'.',.TRUE.)-1)//'.par'
@@ -126,7 +129,7 @@ PROGRAM preprop_hitran
      REWIND(3)
      WRITE(100+local,*) ntemp, '# of entries in partition function table'
      DO nt = 1, ntemp
-        READ(3,'(I4,F22.8)') temp, q
+        READ(3,*) temp, q
         WRITE(100+local,*) temp, q
      END DO
      CLOSE(3)
@@ -141,31 +144,49 @@ PROGRAM preprop_hitran
   
   ! オリジナルファイル読み込み
   nlines = 0
+  nlines_est = 0
+  DO n = 1, nfiles
+     INQUIRE(FILE=TRIM(filename(n)), SIZE=filesize)
+     nlines_est = nlines_est + filesize / 162  ! .par: 161 chars + newline
+  END DO
   DO n = 1, nfiles
      OPEN(99, FILE=TRIM(filename(n)), STATUS='OLD')
      DO
-        READ(99,FMT='(I2,I1,F12.6,E10.3,E10.3,F5.4,F5.3,F10.4,F4.2,F8.6,A15,A15,A15,A15,I6,I12,A1,F7.1,F7.1)', IOSTAT=iostat) &
-             mol, iso, wnum, int, acoeff, aw, sw, lowe, td, ps, uq, lq, ulq, llq, err, ref, flg, gu, gl
+        READ(99,FMT='(I2,A1,F12.6,E10.3,E10.3,F5.4,F5.3,F10.4,F4.2,F8.6,A15,A15,A15,A15,I6,I12,A1,F7.1,F7.1)', IOSTAT=iostat) &
+             mol, iso_char, wnum, int, acoeff, aw, sw, lowe, td, ps, uq, lq, ulq, llq, err, ref, flg, gu, gl
+        SELECT CASE(iso_char)
+        CASE('0'); iso = 10
+        CASE('A'); iso = 11
+        CASE('B'); iso = 12
+        CASE DEFAULT; READ(iso_char, '(I1)') iso
+        END SELECT
 !       IF(code0 == 10 .AND. iso == 2) CYCLE ! for NO2, q130.txt not exist
         IF(iostat /= 0) EXIT
         gfva = gu * acoeff / wnum**2 * (clight * m_ele / (8d0 * pi**2 * e2))
         WRITE(100+iso,*) wnum, lowe, gfva, aw, sw, td
         nlines = nlines + 1
+        IF(MOD(nlines, 10000000_INT64) == 0) &
+             WRITE(*,'(A,I0,A,F5.1,A)',ADVANCE='NO') CHAR(13)//' ', nlines, ' lines processed (', 100.0*DBLE(nlines)/DBLE(nlines_est), '%)'
      END DO
+     WRITE(*,*)
      print '(i2.2,a,i2.2,a)', n, '/', nfiles, ' decomposed '//trim(filename(n))
      CLOSE(99)
   END DO
 
+  PRINT *, 'verifying...'
   nlines_decomp = 0
   DO co = 1, count
-     REWIND(100+co)
+     REWIND(100+local_list(co))
      DO
-        READ(100+co,*,IOSTAT=iostat)
+        READ(100+local_list(co),*,IOSTAT=iostat)
         IF(iostat /= 0) EXIT
         nlines_decomp = nlines_decomp + 1
+        IF(MOD(nlines_decomp, 10000000_INT64) == 0) &
+             WRITE(*,'(A,I0,A,F5.1,A)',ADVANCE='NO') CHAR(13)//' ', nlines_decomp, ' lines verified (', 100.0*DBLE(nlines_decomp)/DBLE(nlines), '%)'
      END DO
-     CLOSE(100+co)
+     CLOSE(100+local_list(co))
   END DO
+  WRITE(*,*)
 
   IF(nlines_decomp /= nlines) THEN
      PRINT *, '*** ERROR: processed numbers of lines do not match: ', nlines, nlines_decomp

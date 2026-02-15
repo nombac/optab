@@ -33,10 +33,19 @@ def download_partition_function(n):
 dir_path = './'
 os.makedirs(os.path.join(dir_path, 'Q'), exist_ok=True)
 
+# Extract global IDs from hitran_meta.txt
+global_ids = set()
+with open(os.path.join(dir_path, 'hitran_meta.txt')) as f:
+    for line in f:
+        tokens = line.split()
+        if tokens and tokens[0].isdigit() and len(tokens) >= 2 and tokens[1].isdigit():
+            global_ids.add(int(tokens[0]))
+print(f"Found {len(global_ids)} global IDs in hitran_meta.txt (max={max(global_ids)})")
+
 # Use ThreadPoolExecutor to parallelize downloads
 with ThreadPoolExecutor(max_workers=10) as executor:
     # Submit all tasks and store the futures in a list
-    futures = {executor.submit(download_partition_function, n): n for n in range(1, 149)}
+    futures = {executor.submit(download_partition_function, n): n for n in sorted(global_ids)}
     
     # Use tqdm to create a progress bar for the futures as they complete
     for future in tqdm(as_completed(futures), total=len(futures), desc="Downloading Q files..."):
