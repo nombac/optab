@@ -24,6 +24,17 @@ endif
 
 ### SYSTEM INDEPENDENT SECTION ###
 
+# Check: REAL128 (quad precision) is not supported on arm64 macOS
+ifneq ($(MAKECMDGOALS),clean)
+UNAME_S := $(shell uname -s)
+UNAME_M := $(shell uname -m)
+ifeq ($(UNAME_S),Darwin)
+ifeq ($(UNAME_M),arm64)
+$(error ERROR: REAL128 (quad precision) is not supported on arm64 macOS. Use an x86_64 machine to compile and run both this program (prep_FastChem) and FastChem itself.)
+endif
+endif
+endif
+
 prep_FastChem: prep_FastChem.o const_module.o
 	$(FC) -o $@ $^ $(LDFLAGS)
 
