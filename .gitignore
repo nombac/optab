@@ -36,3 +36,6 @@
 # FastChem
 eos/FastChem/sample/
 eos/FastChem/sample.h5
+
+# Sample run output (working directory created by sample.sh)
+sample/sample/

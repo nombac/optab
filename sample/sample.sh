@@ -2,7 +2,7 @@
 
 set -x -e
 
-export EOS='/Users/shirose/Desktop/optab/eos/FastChem/table.h5'
+export EOS='/Users/shirose/Desktop/optab/eos/FastChem/sample.h5'
 export OPTAB='/Users/shirose/Desktop/optab'
 export DATABASE='/Users/shirose/Desktop/optab/database'
 export MPIBIN='/opt/local/bin'
@@ -334,7 +334,7 @@ delta_voigt = 1d0   ! criteria for adopting Voigt profile
 &radtemp ! radiation temperature for 2-temp Planck-mean opacity
 temp2 = 6000d0
 /
-&grid_log_const ! wavenumber grid
+&grid_log_const ! logarithmic wavenumber grid
 k_total = 100000 ! total number of grid points
 grd_min = 1d0    ! min value of wavenumber grid
 grd_max = 9d0    ! max value of wavenumber grid

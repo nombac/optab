@@ -18,11 +18,11 @@ This section details the creation of opacity tables using a chemical abundance t
    ```bash
    ../src/convert_Fastchem $OPTAB/work/FastChem-lnk_interpolate_dev/output/table.dat
    ```
-   > Visualize the converted HDF5 file table.h5 using the following Python script:
+   > Visualize the converted HDF5 file sample.h5 using the following Python script:
    >  ```bash
-   >  python3 ../python/eos.py table.h5 mmw --syms=100
+   >  python3 ../python/eos.py sample.h5 mmw --syms=100
    >  ```
-   >  <img src="../eos/FastChem/table.png" width="400">
+   >  <img src="../eos/FastChem/sample.png" width="400">
 
 3. **Execute `optab` with the `sample.sh` Script**
    ```bash
@@ -44,7 +44,7 @@ This section details the creation of opacity tables using a chemical abundance t
    ...
 
    #####
-   export EOS='/Volumes/Storage/optab/eos/FastChem/table.h5'
+   export EOS='/Volumes/Storage/optab/eos/FastChem/sample.h5'
    export OPTAB='/Volumes/Storage/optab/'
    export DATABASE='/Volumes/Storage/optab/database/'
    export MPIBIN='/opt/local/bin'
@@ -52,13 +52,14 @@ This section details the creation of opacity tables using a chemical abundance t
 
    ##### SELECT A SINGLE LINE-SOURCE FOR EACH MOLECULAR ISOTOPOLOGUE
    cat <<EOF > input/species_id.dat
-   ID   Species   Isotopologue  HITRAN    HITEMP        Exomol		
-   1    H2O       1H2-16O       0 HITRAN  1 HITEMP2010  0 POKAZATEL  0 BT2
-   1    H2O       1H2-18O       0 HITRAN  1 HITEMP2010  0 HotWat78		
-   1    H2O       1H2-17O       0 HITRAN  1 HITEMP2010  0 HotWat78		
+        Species   Isotopologue  HITRAN    HITEMP        Exomol
+   1    H2O       1H2-16O       0 HITRAN  1 HITEMP      0 POKAZATEL  0 BT2
+   1    H2O       1H2-18O       0 HITRAN  1 HITEMP      0 HotWat78
+   1    H2O       1H2-17O       0 HITRAN  1 HITEMP      0 HotWat78
    ...
-   101  H3+       1H2-2H_p                              0 ST
-   999  dummy     dummy         0 dummy
+   56   H3+       1H3_p         1 HITRAN                0 MiZATeP
+   56   H3+       1H2-2H_p                              0 ST
+   999  dummy     dummy                                  0 dummy
    EOF
 
    ##### SELECT OPACITY SOURCES TO BE CONSIDERED (1: SELECTED, 0: NOT SELECTED)
@@ -73,8 +74,8 @@ This section details the creation of opacity tables using a chemical abundance t
    electron_scattering = 1      ! electron scattering
    cia = 0                      ! Collision-induced absorption (EXPERIMENTAL)
    photoion_h2 = 1              ! Photoionization by H2
-   photoion_topbase = 0         ! TOPbase photoionization
-   photoion_mathisen = 1        ! Mathisen photoionization
+   photoion_topbase = 1         ! TOPbase photoionization (exclusive with mathisen)
+   photoion_mathisen = 0        ! Mathisen photoionization (exclusive with topbase)
    photoion_verner = 1          ! Verner photoionization
    photoion_h_minus = 1         ! Photoionization by H-
    brems_h_minus = 1            ! Bremsstrahlung by H-
@@ -99,7 +100,7 @@ This section details the creation of opacity tables using a chemical abundance t
    kprc = 1  ! number of processes in wavenumber grid (EXPERIMENTAL)
    lprc = 1  ! number of processes in line loop (EXPERIMENTAL)
    mprc = 1  ! number of processes in reading line-block loop (EXPERIMENTAL)
-   jprc = 12 ! number of processes in layer loop
+   jprc = 8  ! number of processes in layer loop
    /
    ...
    EOF
