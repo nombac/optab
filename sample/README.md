@@ -24,10 +24,10 @@ This section details the creation of opacity tables using a chemical abundance t
    >  ```
    >  <img src="../eos/FastChem/table.png" width="400">
 
-3. **Execute `optab` with the `table.sh` Script**
+3. **Execute `optab` with the `sample.sh` Script**
    ```bash
    cd $OPTAB/sample/
-   bash table.sh
+   bash sample.sh
    ```
    This example takes approximately 68 minutes on a 3.3 GHz 12-Core Intel Xeon W processor using 12 MPI processes.
 
@@ -108,7 +108,7 @@ This section details the creation of opacity tables using a chemical abundance t
    ```
 
 1. **Visualize `optab` Output Files**\
-   For each set of (T, P, N<sub>i</sub>), `optab` produces an HDF5 file, `mono_?????.h5` in the directory `$OPTAB/sample/table/output/`, containing:
+   For each set of (T, P, N<sub>i</sub>), `optab` produces an HDF5 file, `mono_?????.h5` in the directory `$OPTAB/sample/sample/output/`, containing:
    - Rosseland-mean opacity
    - Planck-mean opacity
    - two-temperature Planck-mean opacity
@@ -116,10 +116,10 @@ This section details the creation of opacity tables using a chemical abundance t
 
    Use the `opac.py` and `mono.py` scripts within `$OPTAB/sample/python` to visualize the data as follows. To see the available script arguments, execute them without any arguments.
    ```bash
-   python3 python/opac.py table ross 150
-   python3 python/opac.py table pla 150
-   python3 python/opac.py table pla2 150
-   python3 python/mono.py table 30
-   python3 python/mono.py table 300
+   python3 python/opac.py sample ross 150
+   python3 python/opac.py sample pla 150
+   python3 python/opac.py sample pla2 150
+   python3 python/mono.py sample 30
+   python3 python/mono.py sample 300
    ```
-   <img src="./table/output/ross.png" width="400"><img src="./table/output/pla.png" width="400"><img src="./table/output/pla2.png" width="400"><img src="./table/output/mono_00030.png" width="400"><img src="./table/output/mono_00300.png" width="400">
+   <img src="./sample/output/ross.png" width="400"><img src="./sample/output/pla.png" width="400"><img src="./sample/output/pla2.png" width="400"><img src="./sample/output/mono_00030.png" width="400"><img src="./sample/output/mono_00300.png" width="400">
