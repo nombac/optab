@@ -2,7 +2,7 @@
 
 set -x -e
 
-#export EOS='/Users/shirose/Downloads/optab/eos/FastChem/table.h5'
+#export EOS='/Users/shirose/Downloads/optab/eos/FastChem/sample.h5'
 export OPTAB='/Users/shirose/Downloads/optab'
 export DATABASE='/Users/shirose/database'
 export MPIBIN='/opt/local/bin'
