@@ -32,13 +32,15 @@ In this section, we outline the process of running FastChem with tabulated lnK f
    ```
    make prep_FastChem
    ```
-   
+
    - Verify the settings in` prep_FastChem.dat`, including the label, temperature grid, and pressure grid.
-   
+
    ```
    ./prep_FastChem
    ```
-1. **Run `FastChem:**
+   **Warning:** `prep_FastChem` uses quadruple precision and does not run correctly on arm64 Macs due to ABI constraints. arm64 Mac users must run `prep_FastChem` on a separate x86_64 platform.
+1. **Run `FastChem`:**
+   **Warning:** `FastChem` built with quadruple precision does not run correctly on arm64 Macs due to ABI constraints. arm64 Mac users must run `FastChem` on a separate x86_64 platform.
    ```
    cd $FASTCHEM
    ./fastchem input/config.input_<label>
