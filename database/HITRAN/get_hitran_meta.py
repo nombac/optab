@@ -33,6 +33,9 @@ def download_partition_function(n):
 dir_path = './'
 os.makedirs(os.path.join(dir_path, 'Q'), exist_ok=True)
 
+import subprocess
+subprocess.check_call(["bash", "get_hitran_meta.sh"])
+
 # Extract global IDs from hitran_meta.txt
 global_ids = set()
 with open(os.path.join(dir_path, 'hitran_meta.txt')) as f:
@@ -57,7 +60,4 @@ with ThreadPoolExecutor(max_workers=10) as executor:
         except Exception as exc:
             print(f"Partition function {url} generated an exception: {exc}")
 
-# Convert fetched files to an HDF5 file for Optab
-import subprocess
-subprocess.call(["bash", "get_hitran_meta.sh"])
 
