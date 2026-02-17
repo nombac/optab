@@ -11,10 +11,10 @@ This directory houses the opacity databases utilized by Optab.
 - This directory serves as the repository for HDF5-formatted files created for `optab`.
 
 ### `1016620_Supplementary_Data/`
-- This directory contains the free-free Gaunt factor data authored by [van Hoof et al. (2014)](https://academic.oup.com/mnras/article/444/1/420/1016620).
-1. Download their [supplementary data](https://academic.oup.com/mnras/article/444/1/420/1016620#supplementary-data) and extract it in this directory.
+- This directory contains the free-free Gaunt factor data authored by [van Hoof et al. (2014)](https://academic.oup.com/mnras/article/444/1/420/1016620), sourced from [data.nublado.org](https://data.nublado.org/gauntff/).
    ```bash
-   unzip ~/Downloads/1016620_Supplementary_Data.zip -d 1016620_Supplementary_Data
+   cd 1016620_Supplementary_Data/
+   bash get_gauntff.sh
    ```
 
 ### `Karzas_Latter_1961.tsv`
