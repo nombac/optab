@@ -42,3 +42,22 @@ sample/sample/*
 !sample/sample/output/
 sample/sample/output/*
 !sample/sample/output/*.png
+
+# Python
+__pycache__/
+
+# FastChem sample_100
+eos/FastChem/sample_100.h5
+eos/FastChem/sample_100/
+
+# Converter binaries
+eos/src/convert_FastChem
+eos/src/convert_Phoenix
+eos/src/convert_TEA
+
+# Sample 100 run
+sample/sample_100.sh
+sample/sample_100/
+
+# Work output
+work/FastChem-lnk_interpolate_dev/output_100/
