@@ -26,18 +26,34 @@ PROGRAM convert_FastChem
   TYPE(C_PTR) :: f_ptr
   INTEGER(INT32) :: length, status
   CHARACTER(:), ALLOCATABLE :: filename
+  CHARACTER(16) :: hcn_mode
+  LOGICAL :: sum_hnc
   INTRINSIC :: COMMAND_ARGUMENT_COUNT, GET_COMMAND_ARGUMENT
 
+  IF(COMMAND_ARGUMENT_COUNT() < 2) THEN
+     PRINT *, 'Usage: convert_FastChem <FastChem_output> <HCN|HCN+HNC>'
+     PRINT *, '  HCN      use C1H1N1_1 (HCN) only       -- for HITRAN'
+     PRINT *, '  HCN+HNC  use C1H1N1_1 (HCN) + C1H1N1_2 (HNC) -- for ExoMol'
+     ERROR STOP
+  END IF
+
   CALL GET_COMMAND_ARGUMENT(1, LENGTH=length, STATUS=status)
-  IF(status == 0) THEN
-     ALLOCATE(CHARACTER(length) :: filename)
-     CALL GET_COMMAND_ARGUMENT(1, filename, STATUS=status)
-     IF(status == 0) THEN
-        PRINT *, 'input file = ', filename
-     END IF
+  ALLOCATE(CHARACTER(length) :: filename)
+  CALL GET_COMMAND_ARGUMENT(1, filename)
+  PRINT *, 'input file = ', filename
+
+  CALL GET_COMMAND_ARGUMENT(2, hcn_mode)
+  IF(TRIM(hcn_mode) == 'HCN') THEN
+     sum_hnc = .FALSE.
+     PRINT *, 'HCN mode: C1H1N1_1 (HCN) only -- for HITRAN'
+  ELSE IF(TRIM(hcn_mode) == 'HCN+HNC') THEN
+     sum_hnc = .TRUE.
+     PRINT *, 'HCN+HNC mode: C1H1N1_1 (HCN) + C1H1N1_2 (HNC) -- for ExoMol'
   ELSE
-     PRINT *, 'argument error'
-     STOP
+     PRINT *, 'Usage: convert_FastChem <FastChem_output> <HCN|HCN+HNC>'
+     PRINT *, '  HCN      use C1H1N1_1 (HCN) only       -- for HITRAN'
+     PRINT *, '  HCN+HNC  use C1H1N1_1 (HCN) + C1H1N1_2 (HNC) -- for ExoMol'
+     ERROR STOP
   END IF
   
   OPEN(1, FILE=filename, STATUS='OLD')
@@ -73,10 +89,15 @@ PROGRAM convert_FastChem
   kmax = kmax - 1
   REWIND(2)
   ALLOCATE(species(kmax), id(kmax))
-  DO k = 1, kmax
-     READ(2,*) species(k), id(k)
-!     PRINT *, k, species(k), id(k)
+  k = 0
+  DO i = 1, kmax
+     READ(2,*) species(i), id(i)
+     IF(.NOT. sum_hnc .AND. TRIM(species(i)) == 'C1H1N1_2') CYCLE
+     k = k + 1
+     species(k) = species(i)
+     id(k) = id(i)
   END DO
+  kmax = k
   CLOSE(2)
 
   ! fill output arrays
@@ -100,9 +121,9 @@ PROGRAM convert_FastChem
         DO i = 1, i0
            IF(TRIM(b(i)) == TRIM(species(k))) THEN
 #ifdef MIXING_RATIO_INSTEAD_OF_NUMBER_DENSITY
-              n(id(k),j) = x(i) * x(4)
-#else              
-              n(id(k),j) = x(i)
+              n(id(k),j) = n(id(k),j) + x(i) * x(4)
+#else
+              n(id(k),j) = n(id(k),j) + x(i)
 !              print *, k, i, b(i), species(k), n(id(k),j), temp(j), pres(j)
 #endif              
            END IF
